@@ -1,21 +1,19 @@
 package sa.ai
 
-//import org.specs2.mutable.Specification
+import org.specs2.mutable.{SpecificationWithJUnit}
+
 
 /**
  * Sample
  */
-object HelloTest /*extends Specification*/ {
+class HelloTest extends SpecificationWithJUnit  {
 
+  "World world model" should {
+    val worldModel = WorldSingleton.model
 
-//  "World world" should {
-//    "contain 11 characters" in {
-//      "Hello world" must have size(11)
-//    }
-//
-////    "Have subject 'world'" in {
-////      Hello.subject === "world"
-////    }
-//  }
+    "Have value 'world'" in {
+      worldModel.value must be equalTo "world"
+    }
+  }
 
 }

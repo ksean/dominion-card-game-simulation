@@ -25,9 +25,10 @@
         <scala-major.version>2.10</scala-major.version>
         <scala.version>${scala-major.version}.2</scala.version>
         <scala-plugin.version>3.1.5</scala-plugin.version>
+        <scalaz.version>7.0.2</scalaz.version>
         <specs2.version>2.0</specs2.version>
         <scalacheck.version>1.10.1</scalacheck.version>
-        <scalaz.version>7.0.2</scalaz.version>
+        <junit.version>4.11</junit.version>
     </properties>
 
     <!--
@@ -79,6 +80,11 @@
             <artifactId>scalacheck_${scala-major.version}</artifactId>
             <version>${scalacheck.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
         </dependency>
     </dependencies>
 

@@ -20,6 +20,8 @@
     <inceptionYear>2013</inceptionYear>
 
 
+
+
     <!--=============================================================================================================-->
     <properties>
         <scala-major.version>2.10</scala-major.version>
@@ -29,6 +31,7 @@
         <specs2.version>2.0</specs2.version>
         <scalacheck.version>1.10.1</scalacheck.version>
         <junit.version>4.11</junit.version>
+        <scalamock.version>3.0</scalamock.version>
     </properties>
 
     <!--
@@ -59,6 +62,7 @@
             <artifactId>scalaz-concurrent_${scala-major.version}</artifactId>
             <version>${scalaz.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.specs2</groupId>
             <artifactId>specs2_${scala-major.version}</artifactId>
@@ -85,6 +89,12 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.scalamock</groupId>
+            <artifactId>scalamock-scalatest-support_${scala-major.version}</artifactId>
+            <version>${scalamock.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

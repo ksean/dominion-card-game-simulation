@@ -5,7 +5,7 @@ import sa.ai.model.Card
 /**
  * Entry point
  */
-object Main extends App
+object DominionMain extends App
 {
   val firstGameCardNames =
     Card.FirstGame.map(_.name)

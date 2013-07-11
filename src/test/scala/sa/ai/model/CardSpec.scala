@@ -3,16 +3,23 @@ package sa.ai.model
 import org.specs2.mutable.SpecificationWithJUnit
 
 /**
- * 10/07/13 9:28 PM
+ * Dominion card specification
  */
-class CardSpec extends SpecificationWithJUnit  {
+class CardSpec extends SpecificationWithJUnit
+{
+  "Dominion Card model" should {
 
-  "Card model" should {
-    // see: http://dominioncg.wikia.com/wiki/Smithy
-    val smithyCard = Card("Smithy")
+    "Have a 'First Game' card set" in {
+      val firstGameCards = Card.FirstGame
 
-    "Have card named 'Smithy'" in {
-      smithyCard.name must be equalTo "Smithy"
+      "With 10 cards" in {
+        firstGameCards.size must be equalTo 10
+      }
+
+      "With a 'Smithy'" in {
+        firstGameCards.map(_.name) must contain("Smithy")
+        // see: http://dominioncg.wikia.com/wiki/Smithy
+      }
     }
   }
 

@@ -1,11 +1,14 @@
 package sa.ai
 
+import sa.ai.model.Card
+
 /**
- * 10/07/13 8:17 PM
+ * Entry point
  */
 object Main extends App
 {
-  val subject = WorldSingleton.model
+  val firstGameCardNames =
+    Card.FirstGame.map(_.name)
 
-  println(s"Hello, ${subject.value}")
+  println(s"First game cards are: $firstGameCardNames")
 }

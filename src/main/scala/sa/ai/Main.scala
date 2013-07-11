@@ -10,5 +10,5 @@ object Main extends App
   val firstGameCardNames =
     Card.FirstGame.map(_.name)
 
-  println(s"First game cards are: $firstGameCardNames")
+  println(s"First game cards are: ${firstGameCardNames.mkString(", ")}")
 }

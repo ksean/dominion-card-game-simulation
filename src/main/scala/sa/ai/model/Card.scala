@@ -22,6 +22,6 @@ object Card {
   val Woodcutter = Card("Woodcutter")
   val Workshop = Card("Workshop")
 
-  val FirstGame = ListSet(
+  val FirstGame : Set[Card] = ListSet(
     Cellar, Market, Militia, Mine, Moat, Remodel, Smithy, Village, Woodcutter, Workshop)
 }

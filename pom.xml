@@ -1,15 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
-        
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-    <!--====================================================================-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <!--=============================================================================================================-->
     <modelVersion>4.0.0</modelVersion>
 
-	
-    <!--====================================================================-->
+
+    <!--=============================================================================================================-->
     <groupId>ks.ai</groupId>
     <artifactId>operation-d</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-	
+
+
+    <!--=============================================================================================================-->
+    <name>Operation-D</name>
+    <inceptionYear>2013</inceptionYear>
+
+
+    <!--=============================================================================================================-->
+    <properties>
+        <scala-major.version>2.10</scala-major.version>
+        <scala.version>${scala-major.version}.2</scala.version>
+        <scala-plugin.version>3.1.5</scala-plugin.version>
+        <specs2.version>2.0</specs2.version>
+        <scalacheck.version>1.10.1</scalacheck.version>
+        <scalaz.version>7.0.2</scalaz.version>
+    </properties>
+
+    <!--
+        According to https://github.com/scalaz/scalaz :
+            "You can safely ignore this warning, as the Scala 2.10.x versions are compatible."
+
+        [WARNING]  Expected all dependencies to require Scala version: 2.10.2
+        [WARNING]  ks.ai:operation-d:0.0.1-SNAPSHOT requires scala version: 2.10.2
+        [WARNING]  org.scalaz:scalaz-core_2.10:7.0.2 requires scala version: 2.10.1
+        [WARNING] Multiple versions of scala libraries detected!
+    -->
+
+
+    <!--=============================================================================================================-->
+    <dependencies>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scalaz</groupId>
+            <artifactId>scalaz-core_${scala-major.version}</artifactId>
+            <version>${scalaz.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scalaz</groupId>
+            <artifactId>scalaz-concurrent_${scala-major.version}</artifactId>
+            <version>${scalaz.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.specs2</groupId>
+            <artifactId>specs2_${scala-major.version}</artifactId>
+            <version>${specs2.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.scalaz</groupId>
+                    <artifactId>scalaz-core_${scala-major.version}</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.scalaz</groupId>
+                    <artifactId>scalaz-concurrent_${scala-major.version}</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.scalacheck</groupId>
+            <artifactId>scalacheck_${scala-major.version}</artifactId>
+            <version>${scalacheck.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+
+    <!--=============================================================================================================-->
+    <build>
+        <sourceDirectory>src/main/scala</sourceDirectory>
+        <testSourceDirectory>src/test/scala</testSourceDirectory>
+
+        <plugins>
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>${scala-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <scalaVersion>${scala.version}</scalaVersion>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+    <!--=============================================================================================================-->
+    <repositories>
+        <repository>
+            <id>oss.sonatype.org</id>
+            <name>releases</name>
+            <url>http://oss.sonatype.org/content/repositories/releases</url>
+        </repository>
+    </repositories>
 </project>

@@ -3,9 +3,9 @@ package sa.ai
 /**
  * 10/07/13 8:17 PM
  */
-case object Main extends App
+object Main extends App
 {
-  val subject = "world"
+  val subject = WorldSingleton.model
 
-  println(s"Hello, $subject")
+  println(s"Hello, ${subject.value}")
 }

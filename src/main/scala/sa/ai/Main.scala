@@ -8,4 +8,5 @@ case object Main extends App
   val subject = "world"
 
   println(s"Hello, $subject")
+
 }

@@ -1,7 +1,5 @@
 package sa.ai.model
 
-import scala.collection.immutable.ListSet
-
 /**
  * Dominion card
  */
@@ -22,6 +20,6 @@ object Card {
   val Woodcutter = Card("Woodcutter")
   val Workshop = Card("Workshop")
 
-  val FirstGame : Set[Card] = ListSet(
+  val FirstGame = Seq(
     Cellar, Market, Militia, Mine, Moat, Remodel, Smithy, Village, Woodcutter, Workshop)
 }

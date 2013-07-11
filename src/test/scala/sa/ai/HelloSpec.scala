@@ -6,7 +6,7 @@ import org.specs2.mutable.{SpecificationWithJUnit}
 /**
  * Sample
  */
-class HelloTest extends SpecificationWithJUnit  {
+class HelloSpec extends SpecificationWithJUnit  {
 
   "World world model" should {
     val worldModel = WorldSingleton.model

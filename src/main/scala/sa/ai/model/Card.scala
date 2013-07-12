@@ -6,9 +6,9 @@ package sa.ai.model
 case class Card(
   name : String,
   set : String,
-  card_type : String, // TODO: alternative type
+  card_type : String, // TODO: alternative type?
   cost : Int
-  //action : List[Action] TODO: Define an action class such that a card has a stack of actions
+  //action : List[Action]
 )
 
 object Card {

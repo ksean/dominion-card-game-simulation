@@ -8,7 +8,7 @@ import sa.ai.model.Card
 object DominionMain extends App
 {
   val firstGameCardNames =
-    Card.FirstGame.map(_.name)
+    Card.FirstGame.map(_.toString)
 
   println(s"First game cards are: ${firstGameCardNames.mkString(", ")}")
 }

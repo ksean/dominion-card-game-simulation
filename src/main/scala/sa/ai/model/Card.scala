@@ -4,21 +4,35 @@ package sa.ai.model
  * Dominion card
  */
 case class Card(
-  name : String
+  name : String,
+  set : String,
+  card_type : String, // TODO: alternative type
+  cost : Int
+  //action : List[Action] TODO: Define an action class such that a card has a stack of actions
 )
 
 object Card {
-  // Base set cards (partial list)
-  val Cellar = Card("Cellar")
-  val Market = Card("Market")
-  val Militia = Card("Militia")
-  val Mine = Card("Mine")
-  val Moat = Card("Moat")
-  val Remodel = Card("Remodel")
-  val Smithy = Card("Smithy")
-  val Village = Card("Village")
-  val Woodcutter = Card("Woodcutter")
-  val Workshop = Card("Workshop")
+  // Base set action cards (partial list)
+  val Cellar = Card("Cellar", "Base", "Action", 2)
+  val Market = Card("Market", "Base", "Action", 5)
+  val Militia = Card("Militia", "Base", "Action", 4)
+  val Mine = Card("Mine", "Base", "Action", 5)
+  val Moat = Card("Moat", "Base", "Action", 2)
+  val Remodel = Card("Remodel", "Base", "Action", 4)
+  val Smithy = Card("Smithy", "Base", "Action", 4)
+  val Village = Card("Village", "Base", "Action", 3)
+  val Woodcutter = Card("Woodcutter", "Base", "Action",3)
+  val Workshop = Card("Workshop", "Base", "Action", 3)
+
+  // Base set treasure cards
+  val Copper = Card("Copper", "Base", "Treasure", 0)
+  val Silver = Card("Silver", "Base", "Treasure", 3)
+  val Gold = Card("Gold", "Base", "Treasure", 6)
+
+  // Base set victory cards
+  val Estate = Card("Estate", "Base", "Victory", 2)
+  val Duchy = Card("Duchy", "Base", "Victory", 5)
+  val Province = Card("Province", "Base", "Victory", 8)
 
   val FirstGame = Seq(
     Cellar, Market, Militia, Mine, Moat, Remodel, Smithy, Village, Woodcutter, Workshop)

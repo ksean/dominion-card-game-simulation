@@ -8,7 +8,3 @@ case class Turn(
   owner : Player,
   cards : List[Card]
 )
-
-object Turn {
-
-}

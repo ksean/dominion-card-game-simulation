@@ -1,14 +1,20 @@
 package sa.ai
 
-import sa.ai.model.Card
+import sa.ai.model.{Game, Card}
 
 /**
  * Entry point
  */
 object DominionMain extends App
 {
-  val firstGameCardNames =
-    Card.FirstGame.map(_.toString)
+  val initialState =
+    Game(
 
-  println(s"First game cards are: ${firstGameCardNames.mkString(", ")}")
+    )
+
+
+//  val firstGameCardNames =
+//    Card.FirstGame.map(_.toString)
+//
+//  println(s"First game cards are: ${firstGameCardNames.mkString(", ")}")
 }

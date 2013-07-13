@@ -10,7 +10,3 @@ case class Game(
   turns : List[Turn],
   trash : List[Card]
 )
-
-object Game {
-
-}

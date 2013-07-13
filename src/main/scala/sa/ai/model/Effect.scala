@@ -10,7 +10,3 @@ case class Effect(
   source : Player,
   modifier : List[Modification]
 )
-
-object Effect {
-
-}

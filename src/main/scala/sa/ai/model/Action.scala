@@ -8,7 +8,3 @@ package sa.ai.model
 case class Action(
   effect : List[Effect]
 )
-
-object Action {
-
-}

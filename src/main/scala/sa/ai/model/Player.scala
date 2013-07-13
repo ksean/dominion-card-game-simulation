@@ -9,7 +9,3 @@ case class Player(
   discard : List[Card],
   hand : List[Card]
 )
-
-object Player {
-
-}

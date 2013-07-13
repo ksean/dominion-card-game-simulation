@@ -8,7 +8,3 @@ package sa.ai.model
 case class Modification(
   mod_type : String // TODO: need to build out this definition more
 )
-
-object Modification {
-
-}

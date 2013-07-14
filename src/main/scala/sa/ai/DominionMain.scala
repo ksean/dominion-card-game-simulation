@@ -1,6 +1,8 @@
 package sa.ai
 
-import sa.ai.model.{Game, Card}
+import sa.ai.model.{Game}
+import sa.ai.model.card.{Common, Kingdom, Pile, Card}
+import sa.ai.view.ConsoleView
 
 /**
  * Entry point
@@ -8,9 +10,13 @@ import sa.ai.model.{Game, Card}
 object DominionMain extends App
 {
   val initialState =
-    Game(
-
+    Common(
+      copperCards = Pile(Card.Copper, 20),
+      silverCards = Pile(Card.Silver, 20),
+      goldCards = Pile(Card.Gold, 20)
     )
+
+  ConsoleView.display(initialState)
 
 
 //  val firstGameCardNames =

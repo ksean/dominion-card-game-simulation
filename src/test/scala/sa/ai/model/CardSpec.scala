@@ -1,6 +1,7 @@
 package sa.ai.model
 
 import org.specs2.mutable.SpecificationWithJUnit
+import sa.ai.model.card.Card
 
 /**
  * Dominion card specification

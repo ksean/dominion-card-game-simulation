@@ -1,4 +1,4 @@
-package sa.ai.model
+package sa.ai.model.card
 
 /**
  * Dominion card

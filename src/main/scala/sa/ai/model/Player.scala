@@ -1,5 +1,7 @@
 package sa.ai.model
 
+import sa.ai.model.card.Card
+
 /**
  * Dominion player
  */

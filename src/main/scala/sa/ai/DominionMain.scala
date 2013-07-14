@@ -1,7 +1,7 @@
 package sa.ai
 
 import sa.ai.model.{Game}
-import sa.ai.model.card.{Common, Kingdom, Pile, Card}
+import sa.ai.model.card.{Basic, Pile, Card}
 import sa.ai.view.ConsoleView
 
 /**
@@ -10,10 +10,10 @@ import sa.ai.view.ConsoleView
 object DominionMain extends App
 {
   val initialState =
-    Common(
-      copperCards = Pile(Card.Copper, 20),
-      silverCards = Pile(Card.Silver, 20),
-      goldCards = Pile(Card.Gold, 20)
+    Basic(
+      copper = Pile(Card.Copper, 20),
+      silver = Pile(Card.Silver, 20),
+      gold = Pile(Card.Gold, 20)
     )
 
   ConsoleView.display(initialState)

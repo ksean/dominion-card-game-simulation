@@ -6,7 +6,7 @@ package sa.ai.model.card
 case class Card(
   name : String,
   set : String,
-  card_type : String, // TODO: alternative type?
+  cardType : String, // TODO: alternative type?
   cost : Int
   //action : List[Action]
 )
@@ -33,6 +33,9 @@ object Card {
   val Estate = Card("Estate", "Base", "Victory", 2)
   val Duchy = Card("Duchy", "Base", "Victory", 5)
   val Province = Card("Province", "Base", "Victory", 8)
+
+  // Base set other cards
+  val Curse = Card("Curse", "Base", "Curse", 0)
 
   val FirstGame = Seq(
     Cellar, Market, Militia, Mine, Moat, Remodel, Smithy, Village, Woodcutter, Workshop)

@@ -27,6 +27,20 @@ class BasicSpec extends SpecificationWithJUnit
           basic.gold.cards.size must be equalTo 30
         }
       }
+
+      "Include three basic victories" in {
+        "18 estates" in {
+          basic.estate.cards.size must be equalTo 18
+        }
+
+        "12 duchies" in {
+          basic.duchy.cards.size must be equalTo 12
+        }
+
+        "12 provinces" in {
+          basic.province.cards.size must be equalTo 12
+        }
+      }
     }
   }
 

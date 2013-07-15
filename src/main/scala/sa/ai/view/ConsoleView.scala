@@ -11,5 +11,8 @@ object ConsoleView
     println(common.copper)
     println(common.silver)
     println(common.gold)
+    println(common.estate)
+    println(common.duchy)
+    println(common.province)
   }
 }

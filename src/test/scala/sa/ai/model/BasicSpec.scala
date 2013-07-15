@@ -15,8 +15,16 @@ class BasicSpec extends SpecificationWithJUnit
 
       "Include three basic treasures" in {
 
-        "With 46 coppers" in {
+        "46 coppers" in {
           basic.copper.cards.size must be equalTo 46
+        }
+
+        "40 silvers" in {
+          basic.silver.cards.size must be equalTo 40
+        }
+
+        "30 golds" in {
+          basic.gold.cards.size must be equalTo 30
         }
       }
     }

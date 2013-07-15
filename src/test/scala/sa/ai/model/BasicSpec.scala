@@ -13,33 +13,32 @@ class BasicSpec extends SpecificationWithJUnit
     "At the beginning of a two player game" in {
       val basic = Basic.initialSetForTwoPlayers
 
-      "Include three basic treasures" in {
-
-        "46 coppers" in {
+      "Include 3 basic treasure cards" in {
+        "46 Coppers" in {
           basic.copper.cards.size must be equalTo 46
         }
-
-        "40 silvers" in {
+        "40 Silvers" in {
           basic.silver.cards.size must be equalTo 40
         }
-
-        "30 golds" in {
+        "30 Golds" in {
           basic.gold.cards.size must be equalTo 30
         }
       }
 
-      "Include three basic victories" in {
-        "18 estates" in {
-          basic.estate.cards.size must be equalTo 18
+      "Include 3 basic victory cards" in {
+        "8 Estates" in {
+          basic.estate.cards.size must be equalTo 8
         }
+        "8 Duchies" in {
+          basic.duchy.cards.size must be equalTo 8
+        }
+        "8 Provinces" in {
+          basic.province.cards.size must be equalTo 8
+        }
+      }
 
-        "12 duchies" in {
-          basic.duchy.cards.size must be equalTo 12
-        }
-
-        "12 provinces" in {
-          basic.province.cards.size must be equalTo 12
-        }
+      "Include 10 Curse cards" in {
+        basic.curse.cards.size must be equalTo 10
       }
     }
   }

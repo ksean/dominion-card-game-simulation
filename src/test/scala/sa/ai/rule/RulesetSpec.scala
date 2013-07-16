@@ -11,7 +11,7 @@ class RulesetSpec extends SpecificationWithJUnit {
   "Dominion rules" should {
     val rules = Ruleset
 
-    "Have a two-player initial state" in {
+    "Describe the two-player initial state" in {
       val initialState = Game.twoPlayerInitialState
 
       "With a set of first moves" in {
@@ -34,5 +34,9 @@ class RulesetSpec extends SpecificationWithJUnit {
         }
       }
     }
+
+//    "Describe the first player shuffling the discard pile" in {
+//      val shuffle = Shuffle(0)
+//    }
   }
 }

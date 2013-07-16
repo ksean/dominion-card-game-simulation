@@ -36,7 +36,4 @@ object Card {
 
   // Base set other cards
   val Curse = Card("Curse", "Base", "Curse", 0)
-
-  val FirstGame = Seq(
-    Cellar, Market, Militia, Mine, Moat, Remodel, Smithy, Village, Woodcutter, Workshop)
 }

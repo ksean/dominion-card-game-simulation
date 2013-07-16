@@ -6,5 +6,5 @@ package sa.ai.model
  * e.g. A "wealth" modification of +1 to be used by a copper card
  */
 case class Modification(
-  mod_type : String // TODO: need to build out this definition more
+  modType : String // TODO: need to build out this definition more
 )

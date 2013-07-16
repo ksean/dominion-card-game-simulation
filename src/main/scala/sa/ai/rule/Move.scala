@@ -1,4 +1,4 @@
-package sa.ai.model.rule
+package sa.ai.rule
 
 /**
  * 15/07/13 9:26 PM

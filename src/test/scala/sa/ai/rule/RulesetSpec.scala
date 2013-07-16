@@ -2,7 +2,6 @@ package sa.ai.rule
 
 import org.specs2.mutable.SpecificationWithJUnit
 import sa.ai.model.Game
-import sa.ai.model.rule.{Shuffle, Move, Ruleset}
 
 /**
  * Dominion rules specification
@@ -33,10 +32,26 @@ class RulesetSpec extends SpecificationWithJUnit {
           }
         }
       }
-    }
 
-//    "Describe the first player shuffling the discard pile" in {
-//      val shuffle = Shuffle(0)
-//    }
+      "Where the first player needs to shuffle" in {
+        val shuffle = Shuffle(0)
+
+        "After which" in {
+          val postShuffle = Ruleset.transition(initialState, shuffle)
+
+          "The first discard pile" in {
+            val discard = postShuffle.players(0).discard
+
+            "Is empty" in {
+              discard.cards must be empty
+            }
+          }
+
+//          "The deck" in {
+//            postShuffle.de
+//          }
+        }
+      }
+    }
   }
 }

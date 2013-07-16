@@ -40,6 +40,10 @@ class BasicSpec extends SpecificationWithJUnit
       "Include 10 Curse cards" in {
         basic.curse.cards.size must be equalTo 10
       }
+
+      "Includes an empty trash pile" in {
+        basic.trash.cards must be empty
+      }
     }
   }
 

@@ -17,6 +17,8 @@ class PileSpec extends SpecificationWithJUnit
       val cardCount = 3
       val uniformPile = SupplyPile(Card.Curse, cardCount)
 
+      uniformPile.cards.size must be equalTo cardCount
+
       "that are uniform" in {
         uniformPile.cards.toSet.size must be equalTo 1
       }

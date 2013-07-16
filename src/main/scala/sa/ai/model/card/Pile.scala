@@ -1,11 +1,13 @@
 package sa.ai.model.card
 
 /**
- * 13/07/13 5:24 PM
+ * Dominion Card pile
  */
+
 trait Pile {
   def cards : Seq[Card]
 }
+
 
 case class SupplyPile(
     card : Card,
@@ -16,6 +18,11 @@ case class SupplyPile(
   def cards =
     List.fill(size)(card)
 }
+
+case class TrashPile(cards: Seq[Card])
+  extends Pile
+
+
 
 object Pile {
   def apply(cardType : Card, pileSize : Int):Pile =

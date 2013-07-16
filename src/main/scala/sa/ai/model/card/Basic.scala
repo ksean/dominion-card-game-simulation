@@ -19,10 +19,10 @@ object Basic {
       copper = Pile(Card.Copper, 46),
       silver = Pile(Card.Silver, 40),
       gold = Pile(Card.Gold, 30),
-      estate = Pile(Card.Estate, 18),
-      duchy = Pile(Card.Duchy, 12),
-      province = Pile(Card.Province, 12),
-      curse = Pile(Card.Curse, 30)
+      estate = Pile(Card.Estate, 8),
+      duchy = Pile(Card.Duchy, 8),
+      province = Pile(Card.Province, 8),
+      curse = Pile(Card.Curse, 10)
     )
 
 }

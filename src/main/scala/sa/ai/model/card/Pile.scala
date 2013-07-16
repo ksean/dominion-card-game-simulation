@@ -23,7 +23,6 @@ case class TrashPile(cards: Seq[Card])
   extends Pile
 
 
-
 object Pile {
   def apply(cardType : Card, pileSize : Int):Pile =
     SupplyPile(cardType, pileSize)

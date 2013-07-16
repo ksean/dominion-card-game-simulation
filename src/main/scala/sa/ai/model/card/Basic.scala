@@ -10,7 +10,8 @@ case class Basic(
   estate   : Pile,
   duchy    : Pile,
   province : Pile,
-  curse    : Pile
+  curse    : Pile,
+  trash    : TrashPile
 )
 
 object Basic {
@@ -22,7 +23,8 @@ object Basic {
       estate = Pile(Card.Estate, 8),
       duchy = Pile(Card.Duchy, 8),
       province = Pile(Card.Province, 8),
-      curse = Pile(Card.Curse, 10)
+      curse = Pile(Card.Curse, 10),
+      trash = TrashPile(Seq())
     )
 
 }

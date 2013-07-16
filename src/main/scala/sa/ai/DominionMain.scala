@@ -1,7 +1,7 @@
 package sa.ai
 
 import sa.ai.model.Game
-import sa.ai.model.card.{Basic, Pile, Card}
+import sa.ai.model.card.{TrashPile, Basic, Pile, Card}
 import sa.ai.view.ConsoleView
 
 /**
@@ -17,7 +17,8 @@ object DominionMain extends App
       estate = Pile(Card.Estate, 24),
       duchy = Pile(Card.Estate, 12),
       province = Pile(Card.Estate, 12),
-      curse = Pile(Card.Curse, 30)
+      curse = Pile(Card.Curse, 30),
+      trash = TrashPile(Seq())
     )
 
   ConsoleView.display(initialState)

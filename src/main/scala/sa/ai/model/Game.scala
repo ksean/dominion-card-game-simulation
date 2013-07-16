@@ -4,7 +4,6 @@ import sa.ai.model.card.{Kingdom, Basic, Card}
 
 /**
  * Dominion game
- * http://riograndegames.com/uploads/Game/Game_278_gameRules.pdf
  */
 case class Game(
   players : Seq[Player],

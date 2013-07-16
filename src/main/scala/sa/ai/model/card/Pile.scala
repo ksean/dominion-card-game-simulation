@@ -4,7 +4,7 @@ package sa.ai.model.card
  * Dominion Card pile
  */
 
-trait Pile {
+sealed trait Pile {
   def cards : Seq[Card]
 }
 

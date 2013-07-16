@@ -21,14 +21,14 @@ class RulesetSpec extends SpecificationWithJUnit {
           firstMoves.size must be equalTo 1
 
           "Which is the first move" in {
-            val firstMove = firstMoves.iterator.next()
+            val firstMove : Move = firstMoves.iterator.next()
 
             "For the first player" in {
               firstMove.playerIndex must be equalTo 0
             }
 
             "Requiring a discard pile shuffle" in {
-              firstMove must be (anInstanceOf[Shuffle])
+              firstMove must beAnInstanceOf[Shuffle]
             }
           }
         }

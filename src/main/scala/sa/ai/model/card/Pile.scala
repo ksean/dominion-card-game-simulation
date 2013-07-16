@@ -7,7 +7,7 @@ trait Pile {
   def cards : Seq[Card]
 }
 
-case class UniformPile(
+case class SupplyPile(
     card : Card,
     size : Int
 )
@@ -19,5 +19,5 @@ case class UniformPile(
 
 object Pile {
   def apply(cardType : Card, pileSize : Int):Pile =
-    UniformPile(cardType, pileSize)
+    SupplyPile(cardType, pileSize)
 }

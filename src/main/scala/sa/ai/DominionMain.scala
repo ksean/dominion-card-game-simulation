@@ -1,6 +1,6 @@
 package sa.ai
 
-import sa.ai.model.Game
+import sa.ai.model.{Player, Game}
 import sa.ai.model.card.{Kingdom, Basic, Pile, Card}
 import sa.ai.view.ConsoleView
 
@@ -10,10 +10,7 @@ import sa.ai.view.ConsoleView
 object DominionMain extends App
 {
   val state =
-    Game(
-      Basic.initialSetForTwoPlayers,
-      Kingdom.firstGame
-    )
+    Game.twoPlayerInitialState
 
   ConsoleView.display(state)
 }

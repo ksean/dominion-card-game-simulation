@@ -19,8 +19,14 @@ case class SupplyPile(
     List.fill(size)(card)
 }
 
+
 case class TrashPile(cards: Seq[Card])
   extends Pile
+
+
+case class DiscardPile(cards: Seq[Card])
+  extends Pile
+
 
 
 object Pile {

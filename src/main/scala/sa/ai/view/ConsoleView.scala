@@ -1,15 +1,18 @@
 package sa.ai.view
 
 import sa.ai.model.card.{Basic, Kingdom}
-import sa.ai.model.Game
+import sa.ai.model.{Player, Game}
 
 /**
- * 13/07/13 5:36 PM
+ * Display game state to command-line console
  */
 object ConsoleView
 {
   def display(game:Game) {
-    println("Basic cards: ")
+    println("Players: ")
+    game.players.foreach(display)
+
+    println("\n\nBasic cards: ")
     display(game.basic)
 
     println("\n\nKingdom cards: ")
@@ -28,5 +31,9 @@ object ConsoleView
 
   def display(kingdom:Kingdom) {
     kingdom.supply.foreach(println)
+  }
+
+  def display(player:Player) {
+    println(player.discard)
   }
 }

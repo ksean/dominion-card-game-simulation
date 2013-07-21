@@ -5,6 +5,6 @@ package sa.ai.rule
  */
 sealed class Move(val playerIndex : Int)
 
-case class Shuffle(override val playerIndex : Int) extends Move(playerIndex)
-case class Pickup(override val playerIndex : Int) extends Move(playerIndex)
+case class ShuffleDiscardIntoDeck(override val playerIndex : Int) extends Move(playerIndex)
+case class DrawFromDeck(override val playerIndex : Int, cardCount : Int) extends Move(playerIndex)
 

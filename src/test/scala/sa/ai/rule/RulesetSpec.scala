@@ -27,19 +27,19 @@ class RulesetSpec extends SpecificationWithJUnit {
             }
 
             "Requiring a discard pile shuffle" in {
-              firstMove must beAnInstanceOf[Shuffle]
+              firstMove must beAnInstanceOf[ShuffleDiscardIntoDeck]
             }
           }
         }
       }
 
       "Where the first player needs to shuffle" in {
-        val shuffle = Shuffle(0)
+        val shuffle = ShuffleDiscardIntoDeck(0)
 
         "After which" in {
           val postShuffle = Ruleset.transition(initialState, shuffle)
 
-          "The first discard pile" in {
+          "The first player's discard pile" in {
             val discard = postShuffle.players(0).discard
 
             "Is empty" in {

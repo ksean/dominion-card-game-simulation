@@ -27,6 +27,9 @@ case class TrashPile(cards: Seq[Card])
 case class DiscardPile(cards: Seq[Card])
   extends Pile
 
+case class Deck(cards: Seq[Card])
+  extends Pile
+
 
 
 object Pile {

@@ -47,6 +47,15 @@ class RulesetSpec extends SpecificationWithJUnit {
             }
           }
 
+          "The first player's deck" in {
+            val deck = postShuffle.players(0).deck
+
+            "Has all 10 cards" in {
+              deck.cards.size must be equalTo 10
+            }
+          }
+
+
 //          "The deck" in {
 //            postShuffle.de
 //          }

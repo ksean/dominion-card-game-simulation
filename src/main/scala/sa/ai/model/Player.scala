@@ -1,15 +1,14 @@
 package sa.ai.model
 
-import sa.ai.model.card.{Deck, DiscardPile, Card}
+import sa.ai.model.card.{Hand, Deck, DiscardPile, Card}
 
 /**
  * Dominion player
  */
 case class Player(
   discard : DiscardPile,
-  deck : Deck
-//  discard : List[Card],
-//  hand : List[Card]
+  deck : Deck,
+  hand : Hand = Hand.empty
 )
 
 object Player {

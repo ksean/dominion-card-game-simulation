@@ -7,12 +7,11 @@ import sa.ai.model.Game
  * Dominion rules specification
  */
 class RulesetSpec extends SpecificationWithJUnit {
-  "Dominion rules" should {
+  "Dominion rules for two players" should {
     val rules = Ruleset
 
-    "Describe the two-player initial state" in {
-      val initialState = Game.twoPlayerInitialState
-
+    val initialState = Game.twoPlayerInitialState
+    "Describe the initial state" in {
       "With a set of first moves" in {
         val firstMoves : Set[Move] = rules.actions(initialState)
 
@@ -60,21 +59,40 @@ class RulesetSpec extends SpecificationWithJUnit {
           }
         }
       }
+    }
 
+
+    val afterSecondPlayerShuffles : Game =
+      Ruleset.transition(
+        initialState,
+        (0 to 1).map(ShuffleDiscardIntoDeck).toList
+      )
+    "Start by both players shuffling" in {
       "Where the second player shuffles after the first player" in {
-        val afterSecondPlayerShuffles : Game =
-          Ruleset.transition(
-            initialState,
-            (0 to 1).map(ShuffleDiscardIntoDeck).toList
-          )
-
         "Both having empty discard piles" in {
           afterSecondPlayerShuffles.players.flatMap(_.discard.cards) must be empty
         }
 
         "Both having the same cards in their decks that were originally discarded" in {
+          // todo: test for both players (instead of just 2nd player)
           afterSecondPlayerShuffles.players(1).deck.cards must containAllOf( initialState.players(1).discard.cards )
         }
+
+        "Both having an empty hand" in {
+          afterSecondPlayerShuffles.players.flatMap(_.hand.cards) must be empty
+        }
+      }
+    }
+
+    "Continues by both players drawing cards" in {
+      val afterBothPlayersDraw =
+        Ruleset.transition(
+          afterSecondPlayerShuffles,
+          (0 to 1).map(DrawFromDeck.initialHand).toList
+        )
+
+      "Into their hand" in {
+        afterBothPlayersDraw.players(0).hand.cards must have size 5
       }
     }
   }

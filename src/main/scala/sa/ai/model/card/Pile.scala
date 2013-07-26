@@ -30,6 +30,11 @@ case class DiscardPile(cards: Seq[Card])
 case class Deck(cards: Seq[Card])
   extends Pile
 
+case class Hand(cards: Seq[Card])
+  extends Pile
+object Hand {
+  val empty = Hand(Seq.empty)
+}
 
 
 object Pile {

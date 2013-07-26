@@ -65,7 +65,7 @@ class RulesetSpec extends SpecificationWithJUnit {
           )
 
         "Both having empty discard piles" in {
-          afterSecondPlayerShuffles.players.flatMap(_.deck.cards) must be empty
+          afterSecondPlayerShuffles.players.flatMap(_.discard.cards) must be empty
         }
       }
     }

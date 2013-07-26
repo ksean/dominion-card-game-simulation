@@ -1,7 +1,7 @@
 package sa.ai.rule
 
 import sa.ai.model.{Player, Game}
-import sa.ai.model.card.{DiscardPile, Deck}
+import sa.ai.model.card.{Hand, DiscardPile, Deck}
 import scala.annotation.tailrec
 
 /**
@@ -25,14 +25,23 @@ object Ruleset
         val transitioningPlayer = currentPlayers(playerIndex)
         val nextDiscardPile = DiscardPile(Seq())
         val nextDeck = Deck(transitioningPlayer.discard.cards)
-        val nextPlayerState = Player(nextDiscardPile, nextDeck)
+        val nextPlayerState = Player(nextDiscardPile, nextDeck, transitioningPlayer.hand)
         val nextPlayers = currentPlayers.updated(playerIndex, nextPlayerState)
 
         state.copy(players = nextPlayers)
       }
 
       case DrawFromDeck(playerIndex, count) => {
-        null
+        val currentPlayers = state.players
+        val transitioningPlayer = currentPlayers(playerIndex)
+        val (drawn, remaining) = transitioningPlayer.deck.cards.splitAt(count)
+        val nextHand = Hand(transitioningPlayer.hand.cards ++ drawn)
+        val nextDeck = Deck(remaining)
+        val nextPlayerState = Player(transitioningPlayer.discard, nextDeck, nextHand)
+        val nextPlayers = currentPlayers.updated(playerIndex, nextPlayerState)
+
+
+        state.copy(players = nextPlayers)
       }
     }
   }

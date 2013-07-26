@@ -7,28 +7,28 @@ import org.specs2.mutable.SpecificationWithJUnit
  */
 class GameSpec extends SpecificationWithJUnit
 {
-//  "Dominion card set" should {
+  "Dominion card set" should {
 
-//    "Have a pre-defined initial state" in {
-//      val initial = Game.twoPlayerInitialState
+    "Have a pre-defined initial state" in {
+      val initial = Game.twoPlayerInitialState
 
-//      "For two players" in {
-//        val players = initial.players
-//
-//        "With a player count of two" in {
-//          players.size must be equalTo 2
-//        }
-//
-//        "Where each player has a discard pile"  in {
-//          val discardPiles = players.map(_.discard)
-//
-//          "Containing 10 cards" in {
-//            val discardCards = discardPiles.map(_.cards)
-//
-//
-//          }
-//        }
-//      }
+      "For two players" in {
+        val players = initial.players
+
+        "With a player count of two" in {
+          players.size must be equalTo 2
+        }
+
+        "Where each player has a discard pile"  in {
+          val discardPiles = players.map(_.discard)
+
+          "Containing 10 cards" in {
+            foreach (discardPiles) {
+              _.cards must have size 10
+            }
+          }
+        }
+      }
 
 //      "Where the discard piles of each player have 10 cards"  in {
 //
@@ -61,7 +61,7 @@ class GameSpec extends SpecificationWithJUnit
 //////          player.discard.cards must have size 10
 //////        }
 //      }
-//    }
-//  }
+    }
+  }
 }
 

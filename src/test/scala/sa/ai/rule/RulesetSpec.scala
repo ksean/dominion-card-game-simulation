@@ -2,6 +2,7 @@ package sa.ai.rule
 
 import org.specs2.mutable.SpecificationWithJUnit
 import sa.ai.model.Game
+import sa.ai.model.card.Card
 
 /**
  * Dominion rules specification
@@ -91,8 +92,16 @@ class RulesetSpec extends SpecificationWithJUnit {
           (0 to 1).map(DrawFromDeck.initialHand).toList
         )
 
+      "From their deck" in {
+        foreach( afterBothPlayersDraw.players ) {
+          _.deck.cards must be empty
+        }
+      }
+
       "Into their hand" in {
-        afterBothPlayersDraw.players(0).hand.cards must have size 5
+        foreach( afterBothPlayersDraw.players ) {
+          _.hand.cards must have size 5
+        }
       }
     }
   }

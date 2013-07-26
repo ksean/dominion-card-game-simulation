@@ -37,10 +37,10 @@ class RulesetSpec extends SpecificationWithJUnit {
         val shuffle = ShuffleDiscardIntoDeck(0)
 
         "After which" in {
-          val postShuffle = Ruleset.transition(initialState, shuffle)
+          val afterFirstPlayerShuffle = Ruleset.transition(initialState, shuffle)
 
           "The first player's discard pile" in {
-            val discard = postShuffle.players(0).discard
+            val discard = afterFirstPlayerShuffle.players(0).discard
 
             "Is empty" in {
               discard.cards must be empty
@@ -48,11 +48,15 @@ class RulesetSpec extends SpecificationWithJUnit {
           }
 
           "The first player's deck" in {
-            val deck = postShuffle.players(0).deck
+            val deck = afterFirstPlayerShuffle.players(0).deck
 
             "Has 10 cards" in {
               deck.cards.size must be equalTo 10
             }
+          }
+
+          "The second player has not moved" in {
+            afterFirstPlayerShuffle.players(1) must be equalTo initialState.players(1)
           }
         }
       }
@@ -66,6 +70,10 @@ class RulesetSpec extends SpecificationWithJUnit {
 
         "Both having empty discard piles" in {
           afterSecondPlayerShuffles.players.flatMap(_.discard.cards) must be empty
+        }
+
+        "Both having the same cards in their decks that were originally discarded" in {
+          afterSecondPlayerShuffles.players(1).deck.cards must containAllOf( initialState.players(1).discard.cards )
         }
       }
     }

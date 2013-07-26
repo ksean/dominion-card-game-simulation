@@ -2,6 +2,7 @@ package sa.ai.rule
 
 import sa.ai.model.{Player, Game}
 import sa.ai.model.card.{DiscardPile, Deck}
+import scala.annotation.tailrec
 
 /**
  * http://riograndegames.com/uploads/Game/Game_278_gameRules.pdf
@@ -9,6 +10,13 @@ import sa.ai.model.card.{DiscardPile, Deck}
 object Ruleset
 {
   def actions(state:Game) : Set[Move] = Set(ShuffleDiscardIntoDeck(0))
+
+  @tailrec
+  def transition(state:Game, moves:List[Move]) : Game =
+    moves match {
+      case Nil => state
+      case next :: rest => transition(transition(state, next), rest)
+    }
 
   def transition(state:Game, move:Move) : Game = {
     move match {

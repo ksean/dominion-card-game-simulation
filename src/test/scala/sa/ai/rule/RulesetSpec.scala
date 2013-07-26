@@ -54,11 +54,18 @@ class RulesetSpec extends SpecificationWithJUnit {
               deck.cards.size must be equalTo 10
             }
           }
+        }
+      }
 
+      "Where the second player shuffles after the first player" in {
+        val afterSecondPlayerShuffles : Game =
+          Ruleset.transition(
+            initialState,
+            (0 to 1).map(ShuffleDiscardIntoDeck).toList
+          )
 
-//          "The deck" in {
-//            postShuffle.de
-//          }
+        "Both having empty discard piles" in {
+          afterSecondPlayerShuffles.players.flatMap(_.deck.cards) must be empty
         }
       }
     }

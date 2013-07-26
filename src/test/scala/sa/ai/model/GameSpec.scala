@@ -12,9 +12,8 @@ class GameSpec extends SpecificationWithJUnit
     "Have a pre-defined initial state" in {
       val initial = Game.twoPlayerInitialState
 
+      val players = initial.players
       "For two players" in {
-        val players = initial.players
-
         "With a player count of two" in {
           players.size must be equalTo 2
         }
@@ -30,37 +29,11 @@ class GameSpec extends SpecificationWithJUnit
         }
       }
 
-//      "Where the discard piles of each player have 10 cards"  in {
-//
-//
-////        val haveAnEmptyDeck
-//
-//        initial.players foreach {p =>
-//          ("it contains: " + p) >> {
-//            p.deck must not be empty
-//          }
-//        }
-//
-//
-////        //initial.players must have 'discard be equalTo 10
-////
-////        //initial.players(0).discard.cards size must be equalTo 10
-////
-////        //initial.players(0).discard.cards must have size 10
-////
-//////        initial.players.map(_.discard.cards) foreach {cards =>
-//////          "cards" in {
-//////            cards must have size 10
-//////          }
-//////        }
-////
-//////        for (player <- initial.players) {
-//////
-//////
-//////
-//////          player.discard.cards must have size 10
-//////        }
-//      }
+      "Where the discard piles of each player have 10 cards"  in {
+        foreach (players) {
+          _.discard.cards must have size 10
+        }
+      }
     }
   }
 }

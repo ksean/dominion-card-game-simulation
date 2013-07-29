@@ -6,7 +6,7 @@ package sa.ai.model
  * i.e. A treasure card would originate from a player, target the same player, and modify their usable wealth accordingly
  */
 case class Effect(
-  target : List[Player],
-  source : Player,
+  target : List[Dominion],
+  source : Dominion,
   modifier : List[Modification]
 )

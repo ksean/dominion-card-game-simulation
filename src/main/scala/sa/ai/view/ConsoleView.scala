@@ -1,7 +1,7 @@
 package sa.ai.view
 
 import sa.ai.model.card.{Basic, Kingdom}
-import sa.ai.model.{Player, Game}
+import sa.ai.model.{Dominion, Game}
 
 /**
  * Display game state to command-line console
@@ -33,7 +33,7 @@ object ConsoleView
     kingdom.supply.foreach(println)
   }
 
-  def display(player:Player) {
+  def display(player:Dominion) {
     println(player.discard)
   }
 }

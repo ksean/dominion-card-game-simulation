@@ -145,7 +145,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>sa.ai.DominionMain$</mainClass>
+                            <mainClass>sa.ai.DominionGameMain</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

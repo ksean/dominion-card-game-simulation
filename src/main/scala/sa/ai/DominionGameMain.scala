@@ -7,7 +7,7 @@ import sa.ai.view.ConsoleView
 /**
  * Entry point
  */
-object DominionMain extends App
+object DominionGameMain extends App
 {
   val state =
     Game.twoPlayerInitialState

@@ -34,8 +34,10 @@ class SetupRuleSpec extends SpecificationWithJUnit {
       }
 
       "Where the first player needs to shuffle" in {
+        val shuffle = ShuffleDiscardIntoDeck()
+
         "After which" in {
-          val afterFirstPlayerShuffle = Ruleset.transition(initialState, ShuffleDiscardIntoDeck())
+          val afterFirstPlayerShuffle = Ruleset.transition(initialState, shuffle)
 
           "The first player's discard pile" in {
             val discard = afterFirstPlayerShuffle.players(0).discard
@@ -55,7 +57,7 @@ class SetupRuleSpec extends SpecificationWithJUnit {
 
           "The second player needs to shuffle" in {
             afterFirstPlayerShuffle.nextToAct must be equalTo 1
-            rules.actions(afterFirstPlayerShuffle) must be equalTo Set(ShuffleDiscardIntoDeck())
+            rules.actions(afterFirstPlayerShuffle) must be equalTo Set(shuffle)
           }
 
           "The second player has not moved" in {
@@ -96,12 +98,16 @@ class SetupRuleSpec extends SpecificationWithJUnit {
     "Continues by both players drawing cards" in {
       val afterBothPlayersDraw = {
         val firstPlayerDraws = DrawFromDeck.initialHand
+        afterSecondPlayerShuffles.nextToAct must be equalTo 0
+
         rules.actions(afterSecondPlayerShuffles).toSet must be equalTo Set( firstPlayerDraws )
 
         val afterFirstPlayerDraws =
           rules.transition(afterSecondPlayerShuffles, firstPlayerDraws)
 
         val secondPlayerDraws = DrawFromDeck.initialHand
+        afterFirstPlayerDraws.nextToAct must be equalTo 1
+
         rules.actions(afterFirstPlayerDraws).toSet must be equalTo Set( secondPlayerDraws )
 
         val afterSecondPlayerDraws =

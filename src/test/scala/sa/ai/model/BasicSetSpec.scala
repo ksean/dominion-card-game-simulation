@@ -6,7 +6,7 @@ import sa.ai.model.card.{Basic, Card}
 /**
  * 13/07/13 9:06 PM
  */
-class BasicSpec extends SpecificationWithJUnit
+class BasicSetSpec extends SpecificationWithJUnit
 {
   "Basic Cards" should {
 

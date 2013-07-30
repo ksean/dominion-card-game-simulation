@@ -2,17 +2,17 @@ package sa.ai.rule
 
 import org.specs2.mutable.SpecificationWithJUnit
 import sa.ai.model.Game
-import sa.ai.model.card.Card
 
 /**
- * Dominion rules specification
+ * Dominion rules game setup specification
  */
-class RulesetSpec extends SpecificationWithJUnit {
+class SetupRuleSpec extends SpecificationWithJUnit {
   "Dominion rules for two players" should {
     val rules = Ruleset
 
     val initialState = Game.twoPlayerInitialState
     "Describe the initial state" in {
+
       "With a set of first moves" in {
         val firstMoves : Set[Move] = rules.actions(initialState)
 
@@ -27,17 +27,17 @@ class RulesetSpec extends SpecificationWithJUnit {
             }
 
             "Requiring a discard pile shuffle" in {
-              firstMove must beAnInstanceOf[ShuffleDiscardIntoDeck]
+              firstMove must be equalTo ShuffleDiscardIntoDeck(0)
             }
           }
         }
       }
 
       "Where the first player needs to shuffle" in {
-        val shuffle = ShuffleDiscardIntoDeck(0)
+        val firstPlayerShuffle = ShuffleDiscardIntoDeck(0)
 
         "After which" in {
-          val afterFirstPlayerShuffle = Ruleset.transition(initialState, shuffle)
+          val afterFirstPlayerShuffle = Ruleset.transition(initialState, firstPlayerShuffle)
 
           "The first player's discard pile" in {
             val discard = afterFirstPlayerShuffle.players(0).discard
@@ -53,6 +53,10 @@ class RulesetSpec extends SpecificationWithJUnit {
             "Has 10 cards" in {
               deck.cards.size must be equalTo 10
             }
+          }
+
+          "The second player needs to shuffle" in {
+            rules.actions(afterFirstPlayerShuffle) must be equalTo Set(ShuffleDiscardIntoDeck(1))
           }
 
           "The second player has not moved" in {
@@ -75,8 +79,13 @@ class RulesetSpec extends SpecificationWithJUnit {
         }
 
         "Both having the same cards in their decks that were originally discarded" in {
-          // todo: test for both players (instead of just 2nd player)
-          afterSecondPlayerShuffles.players(1).deck.cards must containAllOf( initialState.players(1).discard.cards )
+          foreach( 0 to 1 ) { playerIndex =>
+            val discardBefore = initialState.players(playerIndex).discard.cards
+            val deckAfter = afterSecondPlayerShuffles.players(playerIndex).deck.cards
+
+            discardBefore.size must be equalTo deckAfter.size
+            discardBefore must containTheSameElementsAs( deckAfter )
+          }
         }
 
         "Both having an empty hand" in {
@@ -94,7 +103,7 @@ class RulesetSpec extends SpecificationWithJUnit {
 
       "From their deck" in {
         foreach( afterBothPlayersDraw.players ) {
-          _.deck.cards must be empty
+          _.deck.cards must have size 5
         }
       }
 

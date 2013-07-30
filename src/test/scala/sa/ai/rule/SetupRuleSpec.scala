@@ -23,21 +23,19 @@ class SetupRuleSpec extends SpecificationWithJUnit {
             val firstMove : Move = firstMoves.iterator.next()
 
             "For the first player" in {
-              firstMove.playerIndex must be equalTo 0
+              initialState.nextToAct must be equalTo 0
             }
 
             "Requiring a discard pile shuffle" in {
-              firstMove must be equalTo ShuffleDiscardIntoDeck(0)
+              firstMove must be equalTo ShuffleDiscardIntoDeck()
             }
           }
         }
       }
 
       "Where the first player needs to shuffle" in {
-        val firstPlayerShuffle = ShuffleDiscardIntoDeck(0)
-
         "After which" in {
-          val afterFirstPlayerShuffle = Ruleset.transition(initialState, firstPlayerShuffle)
+          val afterFirstPlayerShuffle = Ruleset.transition(initialState, ShuffleDiscardIntoDeck())
 
           "The first player's discard pile" in {
             val discard = afterFirstPlayerShuffle.players(0).discard
@@ -56,7 +54,8 @@ class SetupRuleSpec extends SpecificationWithJUnit {
           }
 
           "The second player needs to shuffle" in {
-            rules.actions(afterFirstPlayerShuffle) must be equalTo Set(ShuffleDiscardIntoDeck(1))
+            afterFirstPlayerShuffle.nextToAct must be equalTo 1
+            rules.actions(afterFirstPlayerShuffle) must be equalTo Set(ShuffleDiscardIntoDeck())
           }
 
           "The second player has not moved" in {
@@ -70,7 +69,7 @@ class SetupRuleSpec extends SpecificationWithJUnit {
     val afterSecondPlayerShuffles : Game =
       Ruleset.transition(
         initialState,
-        (0 to 1).map(ShuffleDiscardIntoDeck).toList
+        List.fill(2)(ShuffleDiscardIntoDeck())
       )
     "Start by both players shuffling" in {
       "Where the second player shuffles after the first player" in {
@@ -96,13 +95,13 @@ class SetupRuleSpec extends SpecificationWithJUnit {
 
     "Continues by both players drawing cards" in {
       val afterBothPlayersDraw = {
-        val firstPlayerDraws = DrawFromDeck.initialHand(0)
+        val firstPlayerDraws = DrawFromDeck.initialHand
         rules.actions(afterSecondPlayerShuffles).toSet must be equalTo Set( firstPlayerDraws )
 
         val afterFirstPlayerDraws =
           rules.transition(afterSecondPlayerShuffles, firstPlayerDraws)
 
-        val secondPlayerDraws = DrawFromDeck.initialHand(1)
+        val secondPlayerDraws = DrawFromDeck.initialHand
         rules.actions(afterFirstPlayerDraws).toSet must be equalTo Set( secondPlayerDraws )
 
         val afterSecondPlayerDraws =

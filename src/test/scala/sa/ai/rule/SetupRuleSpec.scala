@@ -95,11 +95,21 @@ class SetupRuleSpec extends SpecificationWithJUnit {
     }
 
     "Continues by both players drawing cards" in {
-      val afterBothPlayersDraw =
-        Ruleset.transition(
-          afterSecondPlayerShuffles,
-          (0 to 1).map(DrawFromDeck.initialHand).toList
-        )
+      val afterBothPlayersDraw = {
+        val firstPlayerDraws = DrawFromDeck.initialHand(0)
+        rules.actions(afterSecondPlayerShuffles).toSet must be equalTo Set( firstPlayerDraws )
+
+        val afterFirstPlayerDraws =
+          rules.transition(afterSecondPlayerShuffles, firstPlayerDraws)
+
+        val secondPlayerDraws = DrawFromDeck.initialHand(1)
+        rules.actions(afterFirstPlayerDraws).toSet must be equalTo Set( secondPlayerDraws )
+
+        val afterSecondPlayerDraws =
+          rules.transition(afterFirstPlayerDraws, firstPlayerDraws)
+
+        afterSecondPlayerDraws
+      }
 
       "From their deck" in {
         foreach( afterBothPlayersDraw.players ) {

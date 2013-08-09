@@ -4,7 +4,7 @@ import org.specs2.mutable.SpecificationWithJUnit
 import sa.ai.model.Game
 
 /**
- * Dominion rules game setup specification
+ * Dominion game setup rules specification
  */
 class SetupRuleSpec extends SpecificationWithJUnit {
   "Dominion rules for two players" should {
@@ -100,7 +100,7 @@ class SetupRuleSpec extends SpecificationWithJUnit {
         val firstPlayerDraws = DrawFromDeck.initialHand
         afterSecondPlayerShuffles.nextToAct must be equalTo 0
 
-        rules.actions(afterSecondPlayerShuffles).toSet must be equalTo Set( firstPlayerDraws )
+        rules.actions(afterSecondPlayerShuffles) must be equalTo Set( firstPlayerDraws )
 
         val afterFirstPlayerDraws =
           rules.transition(afterSecondPlayerShuffles, firstPlayerDraws)
@@ -108,7 +108,7 @@ class SetupRuleSpec extends SpecificationWithJUnit {
         val secondPlayerDraws = DrawFromDeck.initialHand
         afterFirstPlayerDraws.nextToAct must be equalTo 1
 
-        rules.actions(afterFirstPlayerDraws).toSet must be equalTo Set( secondPlayerDraws )
+        rules.actions(afterFirstPlayerDraws) must be equalTo Set( secondPlayerDraws )
 
         val afterSecondPlayerDraws =
           rules.transition(afterFirstPlayerDraws, firstPlayerDraws)

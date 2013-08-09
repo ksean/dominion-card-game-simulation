@@ -28,8 +28,10 @@ object Ruleset
         val nextDeck = Deck(transitioningPlayer.discard.cards)
         val nextPlayerState = Dominion(nextDiscardPile, nextDeck, transitioningPlayer.hand)
         val nextPlayers = currentPlayers.updated(playerIndex, nextPlayerState)
+        val nextNextToAct = (state.nextToAct + 1) % 2
+        
 
-        state.copy(players = nextPlayers)
+        state.copy(players = nextPlayers, nextToAct = nextNextToAct)
       }
 
       case DrawFromDeck(count) => {

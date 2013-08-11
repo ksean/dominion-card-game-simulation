@@ -6,7 +6,7 @@ import sa.ai.model.{BeforeTheGame, Game}
 /**
  * Dominion game setup rules specification
  */
-class SetupRuleSpec extends SpecificationWithJUnit {
+class BeforeTheGameSpec extends SpecificationWithJUnit {
   "Dominion rules for two players" should {
     val rules = Ruleset
 

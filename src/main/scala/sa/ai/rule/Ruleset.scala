@@ -9,7 +9,17 @@ import scala.annotation.tailrec
  */
 object Ruleset
 {
-  def actions(state:Game) : Set[Move] = Set(ShuffleDiscardIntoDeck())
+  def actions(state:Game) : Set[Move] =
+    {
+      if (state.players(state.nextToAct).discard.cards.isEmpty)
+      {
+        Set(DrawFromDeck(5))
+      }
+      else
+      {
+        Set(ShuffleDiscardIntoDeck())
+      }
+    }
 
   @tailrec
   def transition(state:Game, moves:List[Move]) : Game =
@@ -43,9 +53,10 @@ object Ruleset
         val nextDeck = Deck(remaining)
         val nextPlayerState = Dominion(transitioningPlayer.discard, nextDeck, nextHand)
         val nextPlayers = currentPlayers.updated(playerIndex, nextPlayerState)
+        val nextNextToAct = (state.nextToAct + 1) % 2
 
 
-        state.copy(players = nextPlayers)
+        state.copy(players = nextPlayers, nextToAct = nextNextToAct)
       }
     }
   }

@@ -11,6 +11,7 @@ case class Game(
   players : Seq[Dominion],
   basic : Basic,
   kingdom : Kingdom
+  //phase : Phase
 )
 
 object Game {
@@ -19,6 +20,7 @@ object Game {
     Seq.fill(2)(Dominion.initialState),
     Basic.initialSetForTwoPlayers,
     Kingdom.firstGame
+    //Phase.BeforeTheGame
   )
 
   val twoPlayerFirstAction =

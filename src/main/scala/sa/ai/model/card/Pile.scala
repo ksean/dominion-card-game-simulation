@@ -12,9 +12,7 @@ sealed trait Pile {
 case class SupplyPile(
     card : Card,
     size : Int
-)
-  extends Pile
-{
+) extends Pile {
   def cards =
     List.fill(size)(card)
 }

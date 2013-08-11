@@ -22,24 +22,23 @@ object Ruleset
     }
 
   @tailrec
-  def transition(state:Game, moves:List[Move]) : Game =
+  final def transition(state:Game, moves:List[Move]) : Game =
     moves match {
       case Nil => state
       case next :: rest => transition(transition(state, next), rest)
     }
 
-  def transition(state:Game, move:Move) : Game = {
+  def transition(state:Game, move:Move)(implicit shuffler : Shuffler) : Game = {
     move match {
       case ShuffleDiscardIntoDeck() => {
         val playerIndex = state.nextToAct
         val currentPlayers = state.players
         val transitioningPlayer = currentPlayers(playerIndex)
         val nextDiscardPile = DiscardPile(Seq())
-        val nextDeck = Deck(transitioningPlayer.discard.cards)
+        val nextDeck = shuffler.shuffle(transitioningPlayer.discard)
         val nextPlayerState = Dominion(nextDiscardPile, nextDeck, transitioningPlayer.hand)
         val nextPlayers = currentPlayers.updated(playerIndex, nextPlayerState)
         val nextNextToAct = (state.nextToAct + 1) % 2
-        
 
         state.copy(players = nextPlayers, nextToAct = nextNextToAct)
       }

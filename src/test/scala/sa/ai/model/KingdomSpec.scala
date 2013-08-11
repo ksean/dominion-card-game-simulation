@@ -18,4 +18,17 @@ class KingdomSpec extends SpecificationWithJUnit
       }
     }
   }
+
+  //  "Have a 'First Game' card set" should {
+  //    val firstGameCards = Card.
+  //
+  //    "With 10 cards" in {
+  //      firstGameCards.size must be equalTo 10
+  //    }
+  //
+  //    "With a 'Smithy'" in {
+  //      firstGameCards.map(_.name) must contain("Smithy")
+  //      // see: http://dominioncg.wikia.com/wiki/Smithy
+  //    }
+  //  }
 }

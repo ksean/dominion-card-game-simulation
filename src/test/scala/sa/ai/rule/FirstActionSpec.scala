@@ -1,25 +1,29 @@
 package sa.ai.rule
 
 import org.specs2.mutable.SpecificationWithJUnit
-import sa.ai.model.Game
+import sa.ai.model.{Action, Game}
 
 /**
  * 29/07/13 9:02 PM
  */
 class FirstActionSpec extends SpecificationWithJUnit {
-  "At the start of a two-player Dominion game" should {
-    val firstAction = Game.twoPlayerFirstAction
+  "The start of a two-player Dominion game" should {
+    val firstActionState = Game.twoPlayerFirstAction
 
     "Have next-to-act be first player" in {
-      firstAction.nextToAct must be equalTo 0
+      firstActionState.nextToAct must be equalTo 0
     }
 
-    "With moves" in {
-      val firstActionMoves : Set[Move] =
-        Ruleset.actions(firstAction)
+    "Be in the action phase" in {
+      firstActionState.phase must be equalTo Action
 
-      "Consisting of only no action" in {
-        firstActionMoves must be equalTo Set(NoAction)
+      "Having moves" in {
+        val firstActionMoves : Set[Move] =
+          Ruleset.actions(firstActionState)
+
+        "Consisting of only 'no action'" in {
+          firstActionMoves must be equalTo Set(NoAction)
+        }
       }
     }
   }

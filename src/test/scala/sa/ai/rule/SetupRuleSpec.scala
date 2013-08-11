@@ -1,7 +1,7 @@
 package sa.ai.rule
 
 import org.specs2.mutable.SpecificationWithJUnit
-import sa.ai.model.Game
+import sa.ai.model.{BeforeTheGame, Game}
 
 /**
  * Dominion game setup rules specification
@@ -12,6 +12,10 @@ class SetupRuleSpec extends SpecificationWithJUnit {
 
     val initialState = Game.twoPlayerInitialState
     "Describe the initial state" in {
+
+      "Before the game starts" in {
+        initialState.phase must be equalTo BeforeTheGame
+      }
 
       "With a set of first moves" in {
         val firstMoves : Set[Move] = rules.actions(initialState)

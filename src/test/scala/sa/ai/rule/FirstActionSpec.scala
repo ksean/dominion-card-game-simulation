@@ -1,7 +1,7 @@
 package sa.ai.rule
 
 import org.specs2.mutable.SpecificationWithJUnit
-import sa.ai.model.{Action, Game}
+import sa.ai.model.{ActionPhase, Game}
 
 /**
  * 29/07/13 9:02 PM
@@ -15,7 +15,7 @@ class FirstActionSpec extends SpecificationWithJUnit {
     }
 
     "Be in the action phase" in {
-      firstActionState.phase must be equalTo Action
+      firstActionState.phase must be equalTo ActionPhase
 
       "Having moves" in {
         val firstActionMoves : Set[Move] =

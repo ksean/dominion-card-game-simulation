@@ -1,6 +1,6 @@
 package sa.ai.rule
 
-import sa.ai.model.{Action, BeforeTheGame, Dominion, Game}
+import sa.ai.model.{ActionPhase, BeforeTheGame, Dominion, Game}
 import sa.ai.model.card.{Hand, DiscardPile, Deck}
 import scala.annotation.tailrec
 
@@ -60,7 +60,7 @@ object Ruleset
         val nextPhase = {
           playerIndex match {
             case 0 => state.phase
-            case 1 => Action
+            case 1 => ActionPhase
           }
         }
 

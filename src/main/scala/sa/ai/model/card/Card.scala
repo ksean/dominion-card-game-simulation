@@ -13,16 +13,16 @@ case class Card(
 
 object Card {
   // Base set action cards (partial list)
-  val Cellar     = Card("Cellar", "Base", Action, 2)
-  val Market     = Card("Market", "Base", Action, 5)
-  val Militia    = Card("Militia", "Base", Action, 4)
-  val Mine       = Card("Mine", "Base", Action, 5)
-  val Moat       = Card("Moat", "Base", Action, 2)
-  val Remodel    = Card("Remodel", "Base", Action, 4)
-  val Smithy     = Card("Smithy", "Base", Action, 4)
-  val Village    = Card("Village", "Base", Action, 3)
-  val Woodcutter = Card("Woodcutter", "Base", Action,3)
-  val Workshop   = Card("Workshop", "Base", Action, 3)
+  val Cellar     = Card("Cellar", "Base", ActionType, 2)
+  val Market     = Card("Market", "Base", ActionType, 5)
+  val Militia    = Card("Militia", "Base", ActionType, 4)
+  val Mine       = Card("Mine", "Base", ActionType, 5)
+  val Moat       = Card("Moat", "Base", ActionType, 2)
+  val Remodel    = Card("Remodel", "Base", ActionType, 4)
+  val Smithy     = Card("Smithy", "Base", ActionType, 4)
+  val Village    = Card("Village", "Base", ActionType, 3)
+  val Woodcutter = Card("Woodcutter", "Base", ActionType,3)
+  val Workshop   = Card("Workshop", "Base", ActionType, 3)
 
   // Base set treasure cards
   val Copper = Card("Copper", "Base", Treasure, 0)

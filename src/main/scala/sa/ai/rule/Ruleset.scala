@@ -1,6 +1,6 @@
 package sa.ai.rule
 
-import sa.ai.model.{Dominion, Game}
+import sa.ai.model.{Action, BeforeTheGame, Dominion, Game}
 import sa.ai.model.card.{Hand, DiscardPile, Deck}
 import scala.annotation.tailrec
 
@@ -14,6 +14,10 @@ object Ruleset
       if (state.players(state.nextToAct).discard.cards.isEmpty)
       {
         Set(DrawFromDeck(5))
+      }
+      else if (state.players(state.nextToAct).hand.cards.contains())
+      {
+        Set(NoAction)
       }
       else
       {
@@ -53,9 +57,18 @@ object Ruleset
         val nextPlayerState = Dominion(transitioningPlayer.discard, nextDeck, nextHand)
         val nextPlayers = currentPlayers.updated(playerIndex, nextPlayerState)
         val nextNextToAct = (state.nextToAct + 1) % 2
+        val nextPhase = {
+          playerIndex match {
+            case 0 => state.phase
+            case 1 => Action
+          }
+        }
 
+        state.copy(players = nextPlayers, nextToAct = nextNextToAct, phase = nextPhase)
+      }
 
-        state.copy(players = nextPlayers, nextToAct = nextNextToAct)
+      case NoAction => {
+        state
       }
     }
   }

@@ -3,7 +3,7 @@ package sa.ai.rule
 /**
  * 15/07/13 9:26 PM
  */
-sealed abstract trait Move
+sealed trait Move
 
 case class ShuffleDiscardIntoDeck() extends Move
 
@@ -15,3 +15,4 @@ object DrawFromDeck {
 
 
 case object NoAction extends Move
+case object NoBuy extends Move

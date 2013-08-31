@@ -9,7 +9,7 @@ import scala.annotation.tailrec
  */
 object Ruleset
 {
-  def actions(state:Game) : Set[Move] =
+  def moves(state:Game) : Set[Move] =
     {
       val currentPlayers = state.players
       val nextToAct = state.nextToAct
@@ -80,6 +80,10 @@ object Ruleset
       }
 
       case NoAction => {
+        state
+      }
+
+      case NoBuy => {
         state
       }
     }

@@ -18,7 +18,7 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
       }
 
       "With a set of first moves" in {
-        val firstMoves : Set[Move] = rules.actions(initialState)
+        val firstMoves : Set[Move] = rules.moves(initialState)
 
         "That contains only one option" in {
           firstMoves.size must be equalTo 1
@@ -61,7 +61,7 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
 
           "The second player needs to shuffle" in {
             afterFirstPlayerShuffle.nextToAct must be equalTo 1
-            rules.actions(afterFirstPlayerShuffle) must be equalTo Set(shuffle)
+            rules.moves(afterFirstPlayerShuffle) must be equalTo Set(shuffle)
           }
 
           "The second player has not moved" in {
@@ -104,7 +104,7 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
         val firstPlayerDraws = DrawFromDeck.initialHand
         afterSecondPlayerShuffles.nextToAct must be equalTo 0
 
-        rules.actions(afterSecondPlayerShuffles) must be equalTo Set( firstPlayerDraws )
+        rules.moves(afterSecondPlayerShuffles) must be equalTo Set( firstPlayerDraws )
 
         val afterFirstPlayerDraws =
           rules.transition(afterSecondPlayerShuffles, firstPlayerDraws)
@@ -112,7 +112,7 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
         val secondPlayerDraws = DrawFromDeck.initialHand
         afterFirstPlayerDraws.nextToAct must be equalTo 1
 
-        rules.actions(afterFirstPlayerDraws) must be equalTo Set( secondPlayerDraws )
+        rules.moves(afterFirstPlayerDraws) must be equalTo Set( secondPlayerDraws )
 
         val afterSecondPlayerDraws =
           rules.transition(afterFirstPlayerDraws, firstPlayerDraws)

@@ -8,5 +8,5 @@ package sa.ai.model
 sealed trait Phase
 case object BeforeTheGame extends Phase
 case object ActionPhase extends Phase
-case object Buy extends Phase
-case object Cleanup extends Phase
+case object BuyPhase extends Phase
+case object CleanupPhase extends Phase

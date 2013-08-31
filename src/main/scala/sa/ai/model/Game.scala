@@ -1,7 +1,7 @@
 package sa.ai.model
 
 import sa.ai.model.card.{Kingdom, Basic, Card}
-import sa.ai.rule.{DrawFromDeck, ShuffleDiscardIntoDeck, Ruleset}
+import sa.ai.rule.{NoAction, DrawFromDeck, ShuffleDiscardIntoDeck, Ruleset}
 
 /**
  * Dominion game
@@ -31,6 +31,11 @@ object Game {
         ShuffleDiscardIntoDeck(),
         DrawFromDeck.initialHand,
         DrawFromDeck.initialHand
-      )
+      ))
+
+  val twoPlayerFirstBuy =
+    Ruleset.transition(
+      Game.twoPlayerFirstAction,
+      NoAction
     )
 }

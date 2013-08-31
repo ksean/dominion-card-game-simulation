@@ -17,7 +17,7 @@ class FirstMoveSpec extends SpecificationWithJUnit {
 
       "Having moves" in {
         val firstActionMoves : Set[Move] =
-          Ruleset.actions(firstActionState)
+          Ruleset.moves(firstActionState)
 
         "Consisting of only 'no action'" in {
           firstActionMoves must be equalTo Set(NoAction)

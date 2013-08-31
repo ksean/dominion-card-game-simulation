@@ -1,7 +1,7 @@
 package sa.ai.rule
 
 import sa.ai.model.{ActionPhase, BeforeTheGame, Dominion, Game}
-import sa.ai.model.card.{Hand, DiscardPile, Deck}
+import sa.ai.model.card.{ActionType, Hand, DiscardPile, Deck}
 import scala.annotation.tailrec
 
 /**
@@ -11,17 +11,29 @@ object Ruleset
 {
   def actions(state:Game) : Set[Move] =
     {
-      if (state.players(state.nextToAct).discard.cards.isEmpty)
+      val currentPlayers = state.players
+      val nextToAct = state.nextToAct
+      val nextPlayerHand = currentPlayers(nextToAct).hand.cards
+      val nextPlayerDeck = currentPlayers(nextToAct).deck.cards
+
+      if (nextPlayerHand.isEmpty)
       {
-        Set(DrawFromDeck(5))
+        if (nextPlayerDeck.isEmpty)
+        {
+          Set(ShuffleDiscardIntoDeck())
+        }
+        else
+        {
+          Set(DrawFromDeck(5))
+        }
       }
-      else if (state.players(state.nextToAct).hand.cards.contains())
+      else if (!nextPlayerHand.map(_.cardType).contains(ActionType))
       {
         Set(NoAction)
       }
       else
       {
-        Set(ShuffleDiscardIntoDeck())
+        Set(NoAction)
       }
     }
 

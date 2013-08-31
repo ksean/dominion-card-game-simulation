@@ -3,10 +3,8 @@ package sa.ai.rule
 import org.specs2.mutable.SpecificationWithJUnit
 import sa.ai.model.{ActionPhase, Game}
 
-/**
- * 29/07/13 9:02 PM
- */
-class FirstActionSpec extends SpecificationWithJUnit {
+
+class FirstMoveSpec extends SpecificationWithJUnit {
   "The start of a two-player Dominion game" should {
     val firstActionState = Game.twoPlayerFirstAction
 

@@ -15,7 +15,7 @@ class FirstCleanupSpec extends SpecificationWithJUnit {
       val movesInCleanupPhase : Set[Move] =
         Ruleset.moves(inCleanupPhase)
 
-      "In which the player always moves their hand into the discard pile" in {
+      "Where the player always moves their hand into the discard pile" in {
         movesInCleanupPhase must contain(PutHandIntoDiscard())
       }
     }

@@ -111,7 +111,7 @@ object Ruleset
         val transitioningPlayer = currentPlayers(playerIndex)
         val transitioningPlayersDiscard = transitioningPlayer.discard
         val transitioningPlayersHand = transitioningPlayer.hand
-        val nextDiscard = DiscardPile(transitioningPlayersDiscard.cards++ transitioningPlayersHand.cards)
+        val nextDiscard = DiscardPile(transitioningPlayersDiscard.cards ++ transitioningPlayersHand.cards)
         val nextHand = Hand(Seq())
         val nextDeck = transitioningPlayer.deck
         val nextPlayerState = Dominion(nextDiscard,nextDeck,nextHand)

@@ -6,6 +6,8 @@ package sa.ai.rule
 sealed trait Move
 
 case class ShuffleDiscardIntoDeck() extends Move
+case class PutHandIntoDiscard() extends Move
+case class PutSetAsideIntoDiscard() extends Move
 
 
 case class DrawFromDeck(cardCount : Int) extends Move

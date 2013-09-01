@@ -45,6 +45,10 @@ object Ruleset
       {
         Set(NoBuy)
       }
+      else if (state.phase == CleanupPhase)
+      {
+        Set(PutHandIntoDiscard(),PutSetAsideIntoDiscard(),DrawFromDeck(5))
+      }
       else
       {
         Set(NoBuy)
@@ -98,6 +102,24 @@ object Ruleset
       }
 
       case NoBuy => {
+        state
+      }
+
+      case PutHandIntoDiscard() => {
+        val playerIndex = state.nextToAct
+        val currentPlayers = state.players
+        val transitioningPlayer = currentPlayers(playerIndex)
+        val transitioningPlayersDiscard = transitioningPlayer.discard
+        val transitioningPlayersHand = transitioningPlayer.hand
+        val nextDiscard = DiscardPile(transitioningPlayersDiscard.cards++ transitioningPlayersHand.cards)
+        val nextHand = Hand(Seq())
+        val nextDeck = transitioningPlayer.deck
+        val nextPlayerState = Dominion(nextDiscard,nextDeck,nextHand)
+        val nextPlayers = currentPlayers.updated(playerIndex, nextPlayerState)
+        state.copy(players = nextPlayers)
+      }
+
+      case PutSetAsideIntoDiscard() => {
         state
       }
     }

@@ -39,4 +39,13 @@ object Game {
       Game.twoPlayerFirstAction,
       NoBuy
     ).copy(phase = BuyPhase)
+
+  val twoPlayerFirstCleanup =
+    Ruleset.transition(
+      Game.twoPlayerFirstBuy,
+      List(
+        PutHandIntoDiscard(),
+        PutSetAsideIntoDiscard(),
+        DrawFromDeck(5)
+    )).copy(phase = CleanupPhase)
 }

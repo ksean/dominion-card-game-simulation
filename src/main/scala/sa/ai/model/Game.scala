@@ -1,7 +1,8 @@
 package sa.ai.model
 
 import sa.ai.model.card.{Kingdom, Basic, Card}
-import sa.ai.rule.{NoAction, DrawFromDeck, ShuffleDiscardIntoDeck, Ruleset}
+import sa.ai.rule._
+import sa.ai.rule.ShuffleDiscardIntoDeck
 
 /**
  * Dominion game
@@ -36,6 +37,6 @@ object Game {
   val twoPlayerFirstBuy =
     Ruleset.transition(
       Game.twoPlayerFirstAction,
-      NoAction
-    )
+      NoBuy
+    ).copy(phase = BuyPhase)
 }

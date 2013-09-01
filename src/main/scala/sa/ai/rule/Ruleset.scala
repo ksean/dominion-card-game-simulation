@@ -1,8 +1,11 @@
 package sa.ai.rule
 
-import sa.ai.model.{ActionPhase, BeforeTheGame, Dominion, Game}
+import sa.ai.model._
 import sa.ai.model.card.{ActionType, Hand, DiscardPile, Deck}
 import scala.annotation.tailrec
+import sa.ai.model.card.Deck
+import sa.ai.rule.ShuffleDiscardIntoDeck
+import sa.ai.model.card.DiscardPile
 
 /**
  * http://riograndegames.com/uploads/Game/Game_278_gameRules.pdf
@@ -16,24 +19,35 @@ object Ruleset
       val nextPlayerHand = currentPlayers(nextToAct).hand.cards
       val nextPlayerDeck = currentPlayers(nextToAct).deck.cards
 
-      if (nextPlayerHand.isEmpty)
+      if (state.phase == ActionPhase || state.phase == BeforeTheGame)
       {
-        if (nextPlayerDeck.isEmpty)
+        if (nextPlayerHand.isEmpty)
         {
-          Set(ShuffleDiscardIntoDeck())
+          if (nextPlayerDeck.isEmpty)
+          {
+            Set(ShuffleDiscardIntoDeck())
+          }
+          else
+          {
+            Set(DrawFromDeck(5))
+          }
+        }
+        else if (!nextPlayerHand.map(_.cardType).contains(ActionType))
+        {
+          Set(NoAction)
         }
         else
         {
-          Set(DrawFromDeck(5))
+          Set(NoAction)
         }
       }
-      else if (!nextPlayerHand.map(_.cardType).contains(ActionType))
+      else if (state.phase == BuyPhase)
       {
-        Set(NoAction)
+        Set(NoBuy)
       }
       else
       {
-        Set(NoAction)
+        Set(NoBuy)
       }
     }
 

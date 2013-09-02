@@ -15,7 +15,7 @@ class LastProvinceScenario extends SpecificationWithJUnit {
     "Have a player" in {
       val lastProvinceStatePlayer = lastProvinceState.players(lastProvinceState.nextToAct)
 
-      "With a least one available buy" in {
+      "With at least one available buy" in {
         val lastProvinceStatePlayerBuys = Dominion.getBuys(lastProvinceStatePlayer)
         lastProvinceStatePlayerBuys must be greaterThanOrEqualTo 1
 

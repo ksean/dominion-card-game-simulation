@@ -10,25 +10,25 @@ import sa.ai.model.{Dominion, Game}
  */
 class LastProvinceScenario extends SpecificationWithJUnit {
   "The game winning scenario" should {
-    val lastProvinceState = Game.twoPlayerLastBuy
+    val scenario = Game.twoPlayerLastBuy
 
     "Have a player" in {
-      val lastProvinceStatePlayer = lastProvinceState.players(lastProvinceState.nextToAct)
+      val scenarioPlayer = scenario.players(scenario.nextToAct)
 
-      "With a least one available buy" in {
-        val lastProvinceStatePlayerBuys = Dominion.getBuys(lastProvinceStatePlayer)
-        lastProvinceStatePlayerBuys must be greaterThanOrEqualTo 1
+      "With at least one available buy" in {
+        val availableBuys = scenarioPlayer.buys
+        availableBuys must be greaterThanOrEqualTo 1
 
         "Where the player has treasure to spend" in {
-          val lastProvinceStatePlayerTreasure = Dominion.getWealth(lastProvinceStatePlayer)
+          val treasureToSpend = scenarioPlayer.wealth
 
           "Greater than the cost of the province" in {
-            val costOfLastProvince = Card.getCost(Card.Province)
-            costOfLastProvince must be lessThanOrEqualTo lastProvinceStatePlayerTreasure
+            val costOfLastProvince = Card.Province.cost
+            costOfLastProvince must be lessThanOrEqualTo treasureToSpend
 
             "With one province card remaining" in {
-              val inProvinceSupply = lastProvinceState.basic.province.cards.size
-              inProvinceSupply must be equalTo 1
+              val provincesInSupply = scenario.basic.province.cards.size
+              provincesInSupply must be equalTo 1
             }
           }
         }

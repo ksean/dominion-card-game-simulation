@@ -13,9 +13,6 @@ case class Card(
 )
 
 object Card {
-  def getCost(card:Card) : Int = {
-    return card.cost
-  }
   // Base set action cards (partial list)
   val Cellar     = Card("Cellar", "Base", ActionType, 2, 0)
   val Market     = Card("Market", "Base", ActionType, 5, 0)

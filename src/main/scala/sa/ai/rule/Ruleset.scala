@@ -4,7 +4,6 @@ import sa.ai.model._
 import sa.ai.model.card.{ActionType, Hand, DiscardPile, Deck}
 import scala.annotation.tailrec
 import sa.ai.model.card.Deck
-import sa.ai.rule.ShuffleDiscardIntoDeck
 import sa.ai.model.card.DiscardPile
 
 /**

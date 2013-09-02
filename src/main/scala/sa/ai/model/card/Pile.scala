@@ -30,8 +30,14 @@ case class Deck(cards: Seq[Card])
 
 case class Hand(cards: Seq[Card])
   extends Pile
+
+case class InPlay(cards: Seq[Card])
+  extends Pile
 object Hand {
   val empty = Hand(Seq.empty)
+}
+object InPlay{
+  val empty = InPlay(Seq.empty)
 }
 
 

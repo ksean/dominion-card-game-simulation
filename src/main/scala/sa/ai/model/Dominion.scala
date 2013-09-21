@@ -17,6 +17,10 @@ case class Dominion(
   def wealth : Int =
     inPlay.cards.map(_.value).sum
 
+  def victoryPoints : Int =
+    List(discard, deck, hand, inPlay)
+      .flatMap(_.cards.map(_.victory)).sum
+
   def buys : Int = {
     val dominionBuys = 1
     dominionBuys

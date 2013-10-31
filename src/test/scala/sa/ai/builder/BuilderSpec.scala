@@ -8,13 +8,15 @@ import org.specs2.mutable.SpecificationWithJUnit
  */
 class BuilderSpec extends SpecificationWithJUnit {
   "The game builder" should {
-    val gameBuilder = gameBuilder()
+
 
     "Be given a list of conditions" in {
       "With equal to or fewer than than the number of possible conditions" in {
+        ok
       }
       "Where an empty list" in {
         "Results in an empty game state" in {
+          ok
         }
       }
     }

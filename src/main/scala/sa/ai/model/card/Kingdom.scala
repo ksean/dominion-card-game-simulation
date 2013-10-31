@@ -9,6 +9,7 @@ import Card._
 case class Kingdom(supply : Seq[SupplyPile])
 
 object Kingdom {
+  val empty = Kingdom(Seq.empty)
   val firstGame = {
     val firstGameCards = Seq(
       Cellar, Market, Militia, Mine, Moat, Remodel, Smithy, Village, Woodcutter, Workshop)

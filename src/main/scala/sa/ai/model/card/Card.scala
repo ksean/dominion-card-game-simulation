@@ -11,10 +11,10 @@ case class Card(
   cost : Int,
   value : Int,
   victory : Int
-) {
+) {/*
   def randomCard : Card = {
 
-  }
+  }*/
 }
 
 object Card {

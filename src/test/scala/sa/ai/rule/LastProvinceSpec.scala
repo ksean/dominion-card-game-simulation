@@ -1,8 +1,8 @@
 package sa.ai.rule
 
 import org.specs2.mutable.SpecificationWithJUnit
-import sa.ai.model.{BuyPhase, Game}
-import sa.ai.model.card.Card
+import sa.ai.model.{Dominion, BuyPhase, Game}
+import sa.ai.model.card.{InPlay, Card}
 
 /**
  * Date: 08/09/13
@@ -10,11 +10,24 @@ import sa.ai.model.card.Card
  */
 class LastProvinceSpec extends SpecificationWithJUnit {
   "The two-player game-winning province purchase" should {
-    val winningState = Game(???)
+    val winningState : Game =
+      Game
+        .empty
+        .withProvincesRemaining(1)
+        .withNextToAct(0)
+        .withPlayer(0, Dominion.initialState)
+        .withPhase(BuyPhase)
+        .withPlayer(1, Dominion.initialState)
+        .withInPlay(0, InPlay(Seq.fill(8)(Card.Copper)))
 
-    "Have one province card remaining" in {
-      val remainingProvinces = winningState.basic.province.cards.size
-      remainingProvinces must be equalTo 1
+
+    "Have provinces remaining" in {
+      val remainingProvinces =
+        winningState.basic.province.cards.size
+
+      "With only a single province" in {
+        remainingProvinces must be equalTo 1
+      }
     }
 
     "Have the next to act" in {

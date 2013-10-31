@@ -15,6 +15,17 @@ case class Basic(
 )
 
 object Basic {
+  val empty =
+    Basic(
+      SupplyPile.empty,
+      SupplyPile.empty,
+      SupplyPile.empty,
+      SupplyPile.empty,
+      SupplyPile.empty,
+      SupplyPile.empty,
+      SupplyPile.empty,
+      TrashPile.empty
+    )
   val initialSetForTwoPlayers =
     Basic(
       copper = Pile(Card.Copper, 46),

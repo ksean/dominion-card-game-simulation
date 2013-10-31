@@ -16,12 +16,54 @@ case class Game(
   basic : Basic,
   kingdom : Kingdom,
   phase : Phase
-)
+) {
+  def withProvincesRemaining(count: Int) : Game = {
+    copy(
+      basic = basic.copy(
+        province = SupplyPile(Card.Province, count)))
+  }
+  def withNextToAct(player: Int) : Game = {
+    copy(
+      nextToAct = player
+    )
+  }
+  def withPlayer(player: Int, dominion: Dominion) : Game = {
+    val nextPlayers : Seq[Dominion] =
+      players
+        .padTo(player + 1, Dominion.initialState)
+        .updated(player, dominion)
 
-/*
- * TODO: getState() should return the state of the game given certain parameters that are yet to be defined
- */
+    copy(
+      players = nextPlayers
+    )
+  }
+  def withPhase(phase: Phase) : Game = {
+    copy(
+      phase = phase
+    )
+  }
+  def withInPlay(player: Int, inPlay: InPlay) : Game = {
+    val nextDominion : Dominion =
+      players(player)
+        .copy(inPlay = inPlay)
+
+    val nextPlayers : Seq[Dominion] =
+      players.updated(player, nextDominion)
+
+    copy(
+      players = nextPlayers
+    )
+  }
+}
+
 object Game {
+  val empty = Game(
+    -1,
+    Seq.empty,
+    Basic.empty,
+    Kingdom.empty,
+    BeforeTheGame
+  )
   val twoPlayerInitialState = Game(
     0,
     Seq.fill(2)(Dominion.initialState),

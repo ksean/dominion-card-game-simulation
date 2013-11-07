@@ -16,7 +16,7 @@ class FirstCleanupSpec extends SpecificationWithJUnit {
         Ruleset.moves(inCleanupPhase)
 
       "Where the player always moves their hand into the discard pile" in {
-        movesInCleanupPhase must contain(PutHandIntoDiscard())
+        movesInCleanupPhase must contain(PutHandIntoDiscard)
       }
     }
   }

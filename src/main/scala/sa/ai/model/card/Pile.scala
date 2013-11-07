@@ -9,7 +9,7 @@ sealed trait Pile {
 }
 
 object Pile {
-  def apply(cardType : Card, pileSize : Int):Pile =
+  def apply(cardType : Card, pileSize : Int): SupplyPile =
     SupplyPile(cardType, pileSize)
 }
 

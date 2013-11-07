@@ -12,21 +12,26 @@ import sa.ai.rule.PutHandIntoDiscard
  */
 case class Game(
   nextToAct : Int,
-  players : Seq[Dominion],
-  basic : Basic,
-  kingdom : Kingdom,
-  phase : Phase
+  players   : Seq[Dominion],
+  basic     : Basic,
+  kingdom   : Kingdom,
+  phase     : Phase
 ) {
+  def supply : Set[SupplyPile] =
+    basic.supply ++ kingdom.supply
+
   def withProvincesRemaining(count: Int) : Game = {
     copy(
       basic = basic.copy(
         province = SupplyPile(Card.Province, count)))
   }
+
   def withNextToAct(player: Int) : Game = {
     copy(
       nextToAct = player
     )
   }
+
   def withPlayer(player: Int, dominion: Dominion) : Game = {
     val nextPlayers : Seq[Dominion] =
       players
@@ -37,11 +42,13 @@ case class Game(
       players = nextPlayers
     )
   }
+
   def withPhase(phase: Phase) : Game = {
     copy(
       phase = phase
     )
   }
+
   def withInPlay(player: Int, inPlay: InPlay) : Game = {
     val nextDominion : Dominion =
       players(player)
@@ -64,6 +71,7 @@ object Game {
     Kingdom.empty,
     BeforeTheGame
   )
+
   val twoPlayerInitialState = Game(
     0,
     Seq.fill(2)(Dominion.initialState),
@@ -76,8 +84,8 @@ object Game {
     Ruleset.transition(
       Game.twoPlayerInitialState,
       List(
-        ShuffleDiscardIntoDeck(),
-        ShuffleDiscardIntoDeck(),
+        ShuffleDiscardIntoDeck,
+        ShuffleDiscardIntoDeck,
         DrawFromDeck.initialHand,
         DrawFromDeck.initialHand
       ))
@@ -92,8 +100,8 @@ object Game {
     Ruleset.transition(
       Game.twoPlayerFirstBuy,
       List(
-        PutHandIntoDiscard(),
-        PutSetAsideIntoDiscard(),
+        PutHandIntoDiscard,
+        PutSetAsideIntoDiscard,
         DrawFromDeck(5)
     )).copy(phase = CleanupPhase)
 

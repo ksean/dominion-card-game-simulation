@@ -31,14 +31,14 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
             }
 
             "Requiring a discard pile shuffle" in {
-              firstMove must be equalTo ShuffleDiscardIntoDeck()
+              firstMove must be equalTo ShuffleDiscardIntoDeck
             }
           }
         }
       }
 
       "Where the first player needs to shuffle" in {
-        val shuffle = ShuffleDiscardIntoDeck()
+        val shuffle = ShuffleDiscardIntoDeck
 
         "After which" in {
           val afterFirstPlayerShuffle = Ruleset.transition(initialState, shuffle)
@@ -47,7 +47,7 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
             val discard = afterFirstPlayerShuffle.players(0).discard
 
             "Is empty" in {
-              discard.cards must be empty
+              discard.cards must beEmpty
             }
           }
 
@@ -75,12 +75,12 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
     val afterSecondPlayerShuffles : Game =
       Ruleset.transition(
         initialState,
-        List.fill(2)(ShuffleDiscardIntoDeck())
+        List.fill(2)(ShuffleDiscardIntoDeck)
       )
     "Start by both players shuffling" in {
       "Where the second player shuffles after the first player" in {
         "Both having empty discard piles" in {
-          afterSecondPlayerShuffles.players.flatMap(_.discard.cards) must be empty
+          afterSecondPlayerShuffles.players.flatMap(_.discard.cards) must beEmpty
         }
 
         "Both having the same cards in their decks that were originally discarded" in {
@@ -94,7 +94,7 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
         }
 
         "Both having an empty hand" in {
-          afterSecondPlayerShuffles.players.flatMap(_.hand.cards) must be empty
+          afterSecondPlayerShuffles.players.flatMap(_.hand.cards) must beEmpty
         }
       }
     }

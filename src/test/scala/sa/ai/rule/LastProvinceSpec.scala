@@ -20,7 +20,6 @@ class LastProvinceSpec extends SpecificationWithJUnit {
         .withPlayer(1, Dominion.initialState)
         .withInPlay(0, InPlay(Seq.fill(8)(Card.Copper)))
 
-
     "Have provinces remaining" in {
       val remainingProvinces =
         winningState.basic.province.cards.size
@@ -46,7 +45,7 @@ class LastProvinceSpec extends SpecificationWithJUnit {
           }
         }
 
-        "With enough treasure" in {
+        "Have enough treasure" in {
           val playerTreasure = player.wealth
 
           "To afford a province card" in {
@@ -55,7 +54,7 @@ class LastProvinceSpec extends SpecificationWithJUnit {
           }
         }
 
-        "With enough resulting victory points" in {
+        "Have enough resulting victory points" in {
           val playerVictoryPoints = player.victoryPoints + Card.Province.victory
 
           "To beat their opponent" in {
@@ -63,6 +62,17 @@ class LastProvinceSpec extends SpecificationWithJUnit {
             playerVictoryPoints must be greaterThan opponentVictoryPoints
           }
         }
+      }
+    }
+
+    "Have available actions" in {
+      val availableActions = Ruleset.moves(winningState)
+
+      "Including purchase of a province" in {
+        val purchaseOfProvince =
+          Buy(Card.Province)
+
+        availableActions must contain( purchaseOfProvince )
       }
     }
   }

@@ -1,10 +1,8 @@
 package sa.ai.rule
 
 import sa.ai.model._
-import sa.ai.model.card.{ActionType, Hand, DiscardPile, Deck}
+import sa.ai.model.card._
 import scala.annotation.tailrec
-import sa.ai.model.card.Deck
-import sa.ai.model.card.DiscardPile
 
 /**
  * http://riograndegames.com/uploads/Game/Game_278_gameRules.pdf
@@ -24,7 +22,7 @@ object Ruleset
         {
           if (nextPlayerDeck.isEmpty)
           {
-            Set(ShuffleDiscardIntoDeck())
+            Set(ShuffleDiscardIntoDeck)
           }
           else
           {
@@ -42,11 +40,39 @@ object Ruleset
       }
       else if (state.phase == BuyPhase)
       {
-        Set(NoBuy)
+        val activeMoves : Set[Move] =
+          Set.empty
+
+        val availableSupplyPiles : Set[SupplyPile] =
+          state.supply.filter(_.size > 0)
+
+        val currentPlayerWealth : Int =
+          currentPlayers(nextToAct).wealth
+
+        val affordableSupplyPiles : Set[SupplyPile] =
+          availableSupplyPiles.filter(
+            _.card.cost <= currentPlayerWealth)
+        
+        val affordableCardToSupply : Map[Card, SupplyPile] =
+          affordableSupplyPiles
+            .groupBy(_.card)
+            .transform((cardType: Card, piles: Set[SupplyPile]) => {
+              assert(piles.size == 1)
+              piles.iterator.next()
+            })
+        
+        val provinceSupply : Option[SupplyPile] =
+          affordableCardToSupply.get(Card.Province)
+
+        val provincePurchase : Option[Move] =
+          provinceSupply.map((pile: SupplyPile) =>
+            Buy(pile.card))
+
+        Set(NoBuy) ++ provincePurchase
       }
       else if (state.phase == CleanupPhase)
       {
-        Set(PutHandIntoDiscard(),PutSetAsideIntoDiscard(),DrawFromDeck(5))
+        Set(PutHandIntoDiscard,PutSetAsideIntoDiscard,DrawFromDeck(5))
       }
       else
       {
@@ -63,7 +89,7 @@ object Ruleset
 
   def transition(state:Game, move:Move)(implicit shuffler : Shuffler) : Game = {
     move match {
-      case ShuffleDiscardIntoDeck() => {
+      case ShuffleDiscardIntoDeck => {
         val playerIndex = state.nextToAct
         val currentPlayers = state.players
         val transitioningPlayer = currentPlayers(playerIndex)
@@ -104,7 +130,7 @@ object Ruleset
         state
       }
 
-      case PutHandIntoDiscard() => {
+      case PutHandIntoDiscard => {
         val playerIndex = state.nextToAct
         val currentPlayers = state.players
         val transitioningPlayer = currentPlayers(playerIndex)
@@ -118,8 +144,12 @@ object Ruleset
         state.copy(players = nextPlayers)
       }
 
-      case PutSetAsideIntoDiscard() => {
+      case PutSetAsideIntoDiscard => {
         state
+      }
+
+      case Buy(card) => {
+        ???
       }
     }
   }

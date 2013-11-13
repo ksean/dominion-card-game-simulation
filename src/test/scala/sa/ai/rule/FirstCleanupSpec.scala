@@ -1,7 +1,7 @@
 package sa.ai.rule
 
 import org.specs2.mutable.SpecificationWithJUnit
-import sa.ai.model.{CleanupPhase, Game}
+import sa.ai.model.{AfterTheGamePhase, Game}
 
 /**
  * First Cleanup Phase Spec
@@ -9,7 +9,7 @@ import sa.ai.model.{CleanupPhase, Game}
 class FirstCleanupSpec extends SpecificationWithJUnit {
   "The first cleanup phase" should {
     val inCleanupPhase = Game.twoPlayerFirstCleanup
-    inCleanupPhase.phase must be equalTo CleanupPhase
+    inCleanupPhase.phase must be equalTo AfterTheGamePhase
 
     "Have a set of moves" in {
       val movesInCleanupPhase : Set[Move] =

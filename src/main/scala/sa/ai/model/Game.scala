@@ -20,6 +20,31 @@ case class Game(
   def supply : Set[SupplyPile] =
     basic.supply ++ kingdom.supply
 
+  def supply(card: Card) : Option[SupplyPile] =
+    supply.find(_.card == card)
+
+
+
+  def nextPlayer : Dominion =
+    players(nextToAct)
+
+
+  def subtractSupply(card: Card) : Game  = {
+    if(basic.supply.map(_.card).contains(card)) {
+      val nextBasic : Basic =
+        basic.subtractCard(card)
+
+      copy(basic = nextBasic)
+    }
+    else {
+      ???
+    }
+    
+  }
+    
+    
+
+
   def withProvincesRemaining(count: Int) : Game = {
     copy(
       basic = basic.copy(
@@ -54,6 +79,9 @@ case class Game(
       players(player)
         .copy(inPlay = inPlay)
 
+/*    val addWealth : Int =
+      inPla*/
+
     val nextPlayers : Seq[Dominion] =
       players.updated(player, nextDominion)
 
@@ -69,7 +97,7 @@ object Game {
     Seq.empty,
     Basic.empty,
     Kingdom.empty,
-    BeforeTheGame
+    BeforeTheGamePhase
   )
 
   val twoPlayerInitialState = Game(
@@ -77,7 +105,7 @@ object Game {
     Seq.fill(2)(Dominion.initialState),
     Basic.initialSetForTwoPlayers,
     Kingdom.firstGame,
-    BeforeTheGame
+    BeforeTheGamePhase
   )
 
   val twoPlayerFirstAction =
@@ -103,7 +131,7 @@ object Game {
         PutHandIntoDiscard,
         PutSetAsideIntoDiscard,
         DrawFromDeck(5)
-    )).copy(phase = CleanupPhase)
+    )).copy(phase = AfterTheGamePhase)
 
   val twoPlayerLastBuy = Game(
     0,

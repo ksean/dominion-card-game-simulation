@@ -1,7 +1,7 @@
 package sa.ai.rule
 
 import org.specs2.mutable.SpecificationWithJUnit
-import sa.ai.model.{Dominion, BuyPhase, Game}
+import sa.ai.model.{AfterTheGamePhase, Dominion, BuyPhase, Game}
 import sa.ai.model.card.{InPlay, Card}
 
 /**
@@ -65,15 +65,22 @@ class LastProvinceSpec extends SpecificationWithJUnit {
       }
     }
 
+    val purchaseOfProvince : Move =
+      Buy(Card.Province)
+
     "Have available actions" in {
       val availableActions = Ruleset.moves(winningState)
 
       "Including purchase of a province" in {
-        val purchaseOfProvince =
-          Buy(Card.Province)
-
         availableActions must contain( purchaseOfProvince )
       }
+    }
+
+    "Have the ability to purchase a province" in {
+      val terminalState : Game =
+        Ruleset.transition(winningState, purchaseOfProvince)
+
+      terminalState.phase must beEqualTo( AfterTheGamePhase )
     }
   }
 }

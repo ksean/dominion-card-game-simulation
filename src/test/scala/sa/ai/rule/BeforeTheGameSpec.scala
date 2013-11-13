@@ -1,7 +1,7 @@
 package sa.ai.rule
 
 import org.specs2.mutable.SpecificationWithJUnit
-import sa.ai.model.{BeforeTheGame, Game}
+import sa.ai.model.{BeforeTheGamePhase, Game}
 
 /**
  * Dominion game setup rules specification
@@ -14,7 +14,7 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
     "Describe the initial state" in {
 
       "Before the game starts" in {
-        initialState.phase must be equalTo BeforeTheGame
+        initialState.phase must be equalTo BeforeTheGamePhase
       }
 
       "With a set of first moves" in {

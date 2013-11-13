@@ -16,7 +16,7 @@ object Ruleset
       val nextPlayerHand = currentPlayers(nextToAct).hand.cards
       val nextPlayerDeck = currentPlayers(nextToAct).deck.cards
 
-      if (state.phase == ActionPhase || state.phase == BeforeTheGame)
+      if (state.phase == ActionPhase || state.phase == BeforeTheGamePhase)
       {
         if (nextPlayerHand.isEmpty)
         {
@@ -70,7 +70,7 @@ object Ruleset
 
         Set(NoBuy) ++ provincePurchase
       }
-      else if (state.phase == CleanupPhase)
+      else if (state.phase == AfterTheGamePhase)
       {
         Set(PutHandIntoDiscard,PutSetAsideIntoDiscard,DrawFromDeck(5))
       }
@@ -131,16 +131,15 @@ object Ruleset
       }
 
       case PutHandIntoDiscard => {
-        val playerIndex = state.nextToAct
         val currentPlayers = state.players
-        val transitioningPlayer = currentPlayers(playerIndex)
+        val transitioningPlayer = state.nextPlayer
         val transitioningPlayersDiscard = transitioningPlayer.discard
         val transitioningPlayersHand = transitioningPlayer.hand
         val nextDiscard = DiscardPile(transitioningPlayersDiscard.cards ++ transitioningPlayersHand.cards)
         val nextHand = Hand(Seq())
         val nextDeck = transitioningPlayer.deck
         val nextPlayerState = Dominion(nextDiscard,nextDeck,nextHand)
-        val nextPlayers = currentPlayers.updated(playerIndex, nextPlayerState)
+        val nextPlayers = currentPlayers.updated(state.nextToAct, nextPlayerState)
         state.copy(players = nextPlayers)
       }
 
@@ -149,7 +148,38 @@ object Ruleset
       }
 
       case Buy(card) => {
-        ???
+        val nextPlayer = state.nextPlayer
+        assert(nextPlayer.buys             >= 1        , "Must have at least one buy"               )
+        assert(nextPlayer.availableWealth  >= card.cost, "Must be able to afford the card"          )
+        assert(state.supply(card).get.size >= 1        , "Must have at least one card in the supply")
+        assert(state.phase                 == BuyPhase , "Must be in the buy phase"                 )
+
+        val nextNextPlayer : Dominion =
+          nextPlayer
+            .withBuys(nextPlayer.buys - 1)
+            .withSpent(nextPlayer.spent + card.cost)
+            .addDiscard(card)
+
+        val preliminaryNextState : Game =
+          state
+            .withPlayer(state.nextToAct, nextNextPlayer)
+            .subtractSupply(card)
+
+//        val nextSupply : SupplyPile =
+//          state.supply(card).get.plusSize(-1)
+//
+//
+//          state.withPlayer(state.nextToAct, nextNextPlayer)
+//          state.subtractSupply(card)
+
+        val nextState : Game =
+          if (card == Card.Province && preliminaryNextState.basic.province.size == 0) {
+            preliminaryNextState.withPhase(AfterTheGamePhase)
+          } else {
+            preliminaryNextState
+          }
+
+        nextState
       }
     }
   }

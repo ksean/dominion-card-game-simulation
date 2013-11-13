@@ -15,6 +15,20 @@ case class Basic(
 ) {
   def supply : Set[SupplyPile] =
     Set(copper, silver, gold, estate, duchy, province, curse)
+
+  def subtractCard(card: Card) : Basic =
+    card match{
+      case Card.Province => {
+        val newProvince =
+          province.plusSize(-1)
+
+        copy(province = newProvince)
+      }
+
+    }
+
+
+//    ???
 }
 
 object Basic {

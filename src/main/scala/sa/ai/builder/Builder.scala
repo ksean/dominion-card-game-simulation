@@ -32,7 +32,7 @@ case class Builder(
 
   def randomPhase : Phase = {
     val rand = new Random(System.currentTimeMillis())
-    val phases = Seq(ActionPhase,BuyPhase,CleanupPhase)
+    val phases = Seq(ActionPhase,BuyPhase,AfterTheGamePhase)
     val randPhase = phases(rand.nextInt(phases.length))
     randPhase
   }

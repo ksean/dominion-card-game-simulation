@@ -21,6 +21,8 @@ case class SupplyPile(
 ) extends Pile {
   def cards =
     Seq.fill(size)(card)
+  def plusSize(addend: Int) : SupplyPile =
+    copy(size = size + addend)
 
   def isEmpty =
     card == null
@@ -45,6 +47,10 @@ object TrashPile{
 
 case class DiscardPile(cards: Seq[Card])
   extends Pile
+{
+  def add(card : Card) : DiscardPile =
+    DiscardPile(cards :+ card)
+}
 
 object DiscardPile{
   val empty = DiscardPile(Seq.empty)

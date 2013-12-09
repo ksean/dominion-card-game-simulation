@@ -19,12 +19,12 @@ case class Basic(
   def subtractCard(card: Card) : Basic =
     card match{
       case Card.Province => {
-        val newProvince =
-          province.plusSize(-1)
-
-        copy(province = newProvince)
+        copy(province = province.plusSize(-1))
       }
 
+      case Card.Silver => {
+        copy(silver = silver.plusSize(-1))
+      }
     }
 
 

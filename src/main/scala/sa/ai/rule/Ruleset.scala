@@ -40,39 +40,15 @@ object Ruleset
       }
       else if (state.phase == BuyPhase)
       {
-        val activeMoves : Set[Move] =
-          Set.empty
-
-        val availableSupplyPiles : Set[SupplyPile] =
-          state.supply.filter(_.size > 0)
-
-        val currentPlayerWealth : Int =
-          currentPlayers(nextToAct).wealth
-
-        val affordableSupplyPiles : Set[SupplyPile] =
-          availableSupplyPiles.filter(
-            _.card.cost <= currentPlayerWealth)
-        
-        val affordableCardToSupply : Map[Card, SupplyPile] =
-          affordableSupplyPiles
-            .groupBy(_.card)
-            .transform((cardType: Card, piles: Set[SupplyPile]) => {
-              assert(piles.size == 1)
-              piles.iterator.next()
-            })
-        
-        val provinceSupply : Option[SupplyPile] =
-          affordableCardToSupply.get(Card.Province)
-
-        val provincePurchase : Option[Move] =
-          provinceSupply.map((pile: SupplyPile) =>
-            Buy(pile.card))
-
-        Set(NoBuy) ++ provincePurchase
+        buyPhase(state)
       }
       else if (state.phase == AfterTheGamePhase)
       {
         Set(PutHandIntoDiscard,PutSetAsideIntoDiscard,DrawFromDeck(5))
+      }
+      else if (state.phase == CleanupPhase)
+      {
+        Set(CleanupAction)
       }
       else
       {
@@ -80,11 +56,42 @@ object Ruleset
       }
     }
 
+  def buyPhase(state:Game) : Set[Move] =
+  {
+    val availableSupplyPiles : Set[SupplyPile] =
+      state.supply.filter(_.size > 0)
+
+    val currentPlayerWealth : Int =
+      state.nextPlayer.wealth
+
+    val affordableSupplyPiles : Set[SupplyPile] =
+      availableSupplyPiles.filter(
+        _.card.cost <= currentPlayerWealth)
+
+    val affordableCardToSupply : Map[Card, SupplyPile] =
+      affordableSupplyPiles
+        .groupBy(_.card)
+        .transform((cardType: Card, piles: Set[SupplyPile]) => {
+        assert(piles.size == 1)
+        piles.iterator.next()
+      })
+
+    val provinceSupply : Option[SupplyPile] =
+      affordableCardToSupply.get(Card.Province)
+
+    val provincePurchase : Option[Move] =
+      provinceSupply.map((pile: SupplyPile) =>
+        Buy(pile.card))
+
+    Set(NoBuy) ++ provincePurchase
+  }
+
+
   @tailrec
-  final def transition(state:Game, moves:List[Move]) : Game =
+  final def transition(state:Game, moves:Seq[Move])(implicit shuffler : Shuffler) : Game =
     moves match {
       case Nil => state
-      case next :: rest => transition(transition(state, next), rest)
+      case next :: rest => transition(transition(state, next)(shuffler), rest)
     }
 
   def transition(state:Game, move:Move)(implicit shuffler : Shuffler) : Game = {
@@ -123,11 +130,18 @@ object Ruleset
       }
 
       case NoAction => {
+        val treasureInHand : Seq[Card] =
+          state.nextPlayer.hand.cards.filter(_.cardType == Treasure)
+
         state
+          .withPhase(BuyPhase)
+          .withNextInPlay(_.add(treasureInHand))
+          .withNextHand(_.remove(treasureInHand))
       }
 
       case NoBuy => {
         state
+        .withPhase(CleanupPhase)
       }
 
       case PutHandIntoDiscard => {
@@ -180,6 +194,13 @@ object Ruleset
           }
 
         nextState
+      }
+
+      case CleanupAction => {
+        state
+          .withNextDiscard(_.add(state.nextPlayer.inPlay.cards))
+          .withNextSpent(0)
+          .withNextInPlay(InPlay.empty)
       }
     }
   }

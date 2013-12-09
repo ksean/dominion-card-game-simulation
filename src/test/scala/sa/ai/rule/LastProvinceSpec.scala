@@ -80,7 +80,9 @@ class LastProvinceSpec extends SpecificationWithJUnit {
       val terminalState : Game =
         Ruleset.transition(winningState, purchaseOfProvince)
 
-      terminalState.phase must beEqualTo( AfterTheGamePhase )
+      "Thereby ending the game" in {
+        terminalState.phase must beEqualTo( AfterTheGamePhase )
+      }
     }
   }
 }

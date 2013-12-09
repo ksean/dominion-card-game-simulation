@@ -16,7 +16,7 @@ case class Dominion(
   spent   : Int    = 0
 ) {
   assert(spent >= 0     , "Can't spend a negative amount"      )
-  assert(spent <= wealth, "Can't spend more than what you have")
+  assert(spent <= wealth, s"Can't spend more than what you have ($spent vs $wealth)")
 
 
   def wealth : Int =
@@ -26,9 +26,12 @@ case class Dominion(
     wealth - spent
 
   def victoryPoints : Int =
-    List(discard, deck, hand, inPlay)
-      .flatMap(_.cards.map(_.victory)).sum
+    cards.map(_.victory).sum
 
+
+  def cards : Traversable[Card] =
+    Seq(discard, deck, hand, inPlay)
+      .flatMap(_.cards)
 
 
   def withBuys(buys: Int) : Dominion =
@@ -43,7 +46,9 @@ case class Dominion(
     
     copy(discard = nextDiscard)
   }
-    
+
+  def withHand(cards: Seq[Card]) : Dominion =
+    copy(hand = Hand(cards))
 }
 
 object Dominion {

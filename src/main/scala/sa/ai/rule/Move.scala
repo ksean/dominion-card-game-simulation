@@ -22,3 +22,5 @@ case object NoAction extends Move
 case object NoBuy    extends Move
 
 case class Buy(card : Card) extends Move
+
+case object CleanupAction extends Move

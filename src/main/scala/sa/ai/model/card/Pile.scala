@@ -19,8 +19,10 @@ case class SupplyPile(
   card : Card,
   size : Int
 ) extends Pile {
+
   def cards =
     Seq.fill(size)(card)
+
   def plusSize(addend: Int) : SupplyPile =
     copy(size = size + addend)
 
@@ -50,6 +52,10 @@ case class DiscardPile(cards: Seq[Card])
 {
   def add(card : Card) : DiscardPile =
     DiscardPile(cards :+ card)
+
+  def add(additionalCards : Traversable[Card]) : DiscardPile =
+    DiscardPile(cards ++ additionalCards)
+  
 }
 
 object DiscardPile{
@@ -69,6 +75,10 @@ object Deck{
 
 case class Hand(cards: Seq[Card])
   extends Pile
+{
+  def remove(cardsToRemove : Seq[Card]) : Hand =
+    Hand(cards.diff(cardsToRemove))
+}
 
 object Hand {
   val empty = Hand(Seq.empty)
@@ -78,6 +88,10 @@ object Hand {
 
 case class InPlay(cards: Seq[Card])
   extends Pile
+{
+  def add(additionalCards: Seq[Card]) : InPlay =
+    InPlay(cards ++ additionalCards)
+}
 
 object InPlay{
   val empty = InPlay(Seq.empty)

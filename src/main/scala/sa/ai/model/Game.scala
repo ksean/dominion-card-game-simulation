@@ -57,6 +57,10 @@ case class Game(
     )
   }
 
+
+  def withNextPlayer(dominion: Dominion) : Game =
+    withPlayer(nextToAct, dominion)
+
   def withPlayer(player: Int, dominion: Dominion) : Game = {
     val nextPlayers : Seq[Dominion] =
       players
@@ -74,20 +78,53 @@ case class Game(
     )
   }
 
+  def withNextHand(handTransformer : (Hand => Hand)) : Game =
+    withHand(nextToAct, handTransformer(nextPlayer.hand))
+
+  def withHand(player: Int, hand: Hand) : Game = {
+    val nextDominion : Dominion =
+      players(player)
+        .copy(hand = hand)
+
+    withPlayer(player, nextDominion)
+  }
+
+
+
+  def withNextInPlay(inPlayTransformer : (InPlay => InPlay)) : Game =
+    withNextInPlay(inPlayTransformer(nextPlayer.inPlay))
+
+  def withNextInPlay(inPlayer: InPlay) : Game =
+    withInPlay(nextToAct, inPlayer)
+
   def withInPlay(player: Int, inPlay: InPlay) : Game = {
     val nextDominion : Dominion =
       players(player)
         .copy(inPlay = inPlay)
 
-/*    val addWealth : Int =
-      inPla*/
+    withPlayer(player, nextDominion)
+  }
 
-    val nextPlayers : Seq[Dominion] =
-      players.updated(player, nextDominion)
+  def withNextDiscard(discardTransformer : (DiscardPile => DiscardPile)) : Game =
+    withDiscard(nextToAct, discardTransformer(nextPlayer.discard))
 
-    copy(
-      players = nextPlayers
-    )
+  def withDiscard(player: Int, discard: DiscardPile) : Game = {
+    val nextDominion : Dominion =
+      players(player)
+        .copy(discard = discard)
+
+    withPlayer(player, nextDominion)
+  }
+
+  def withNextSpent(spent : Int) : Game =
+    withSpent(nextToAct, spent)
+
+  def withSpent(player: Int, spent: Int) : Game = {
+    val nextDominion : Dominion =
+      players(player)
+        .copy(spent = spent)
+
+    withPlayer(player, nextDominion)
   }
 }
 
@@ -108,7 +145,7 @@ object Game {
     BeforeTheGamePhase
   )
 
-  val twoPlayerFirstAction =
+  def twoPlayerFirstAction(implicit shuffler : Shuffler) =
     Ruleset.transition(
       Game.twoPlayerInitialState,
       List(
@@ -116,7 +153,8 @@ object Game {
         ShuffleDiscardIntoDeck,
         DrawFromDeck.initialHand,
         DrawFromDeck.initialHand
-      ))
+      )
+    )(shuffler)
 
   val twoPlayerFirstBuy =
     Ruleset.transition(
@@ -124,18 +162,16 @@ object Game {
       NoBuy
     ).copy(phase = BuyPhase)
 
-  val twoPlayerFirstCleanup =
-    Ruleset.transition(
-      Game.twoPlayerFirstBuy,
-      List(
-        PutHandIntoDiscard,
-        PutSetAsideIntoDiscard,
-        DrawFromDeck(5)
-    )).copy(phase = AfterTheGamePhase)
-
   val twoPlayerLastBuy = Game(
     0,
-    Seq(Dominion.initialState.copy(Dominion.initialState.discard,Dominion.initialState.deck,Dominion.initialState.hand,InPlay(Seq(Card.Gold, Card.Gold, Card.Gold))), Dominion.initialState),
+    Seq(
+      Dominion.initialState.copy(
+        Dominion.initialState.discard,
+        Dominion.initialState.deck,
+        Dominion.initialState.hand,
+        InPlay(Seq(Card.Gold, Card.Gold, Card.Gold))
+      ),
+      Dominion.initialState),
     Basic.initialSetForTwoPlayers.copy(province = Pile(Card.Province, 1)),
     Kingdom.firstGame,
     BuyPhase

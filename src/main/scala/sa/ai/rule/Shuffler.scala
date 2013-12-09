@@ -1,6 +1,6 @@
 package sa.ai.rule
 
-import sa.ai.model.card.{Deck, DiscardPile}
+import sa.ai.model.card.{Card, Deck, DiscardPile}
 import scala.util.Random
 
 /**
@@ -16,13 +16,19 @@ object Shuffler {
 }
 
 
-case class RandomShuffler(random : Random = new Random()) extends Shuffler
-{
+case class RandomShuffler(random : Random = new Random()) extends Shuffler {
   def shuffle(discard : DiscardPile): Deck =
     Deck(random.shuffle(discard.cards))
 }
 
+
 case object PassThroughShuffler extends Shuffler {
   def shuffle(discard: DiscardPile): Deck =
     Deck(discard.cards)
+}
+
+
+case class LiteralShuffler(cards: Seq[Card]) extends Shuffler {
+  def shuffle(discard: DiscardPile): Deck =
+    Deck(cards)
 }

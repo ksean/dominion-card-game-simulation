@@ -78,8 +78,12 @@ case class Game(
     )
   }
 
+
   def withNextHand(handTransformer : (Hand => Hand)) : Game =
-    withHand(nextToAct, handTransformer(nextPlayer.hand))
+    withNextHand(handTransformer(nextPlayer.hand))
+
+  def withNextHand(nextHand : Hand) : Game =
+    withHand(nextToAct, nextHand)
 
   def withHand(player: Int, hand: Hand) : Game = {
     val nextDominion : Dominion =
@@ -151,8 +155,8 @@ object Game {
       List(
         ShuffleDiscardIntoDeck,
         ShuffleDiscardIntoDeck,
-        DrawFromDeck.initialHand,
-        DrawFromDeck.initialHand
+        DrawFromDeck.newHand,
+        DrawFromDeck.newHand
       )
     )(shuffler)
 

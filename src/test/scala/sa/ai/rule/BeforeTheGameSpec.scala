@@ -101,7 +101,7 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
 
     "Continues by both players drawing cards" in {
       val afterBothPlayersDraw = {
-        val firstPlayerDraws = DrawFromDeck.initialHand
+        val firstPlayerDraws = DrawFromDeck.newHand
         afterSecondPlayerShuffles.nextToAct must be equalTo 0
 
         rules.moves(afterSecondPlayerShuffles) must be equalTo Set( firstPlayerDraws )
@@ -109,7 +109,7 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
         val afterFirstPlayerDraws =
           rules.transition(afterSecondPlayerShuffles, firstPlayerDraws)
 
-        val secondPlayerDraws = DrawFromDeck.initialHand
+        val secondPlayerDraws = DrawFromDeck.newHand
         afterFirstPlayerDraws.nextToAct must be equalTo 1
 
         rules.moves(afterFirstPlayerDraws) must be equalTo Set( secondPlayerDraws )

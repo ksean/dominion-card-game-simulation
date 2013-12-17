@@ -197,10 +197,15 @@ object Ruleset
       }
 
       case CleanupAction => {
-        state
-          .withNextDiscard(_.add(state.nextPlayer.inPlay.cards))
-          .withNextSpent(0)
-          .withNextInPlay(InPlay.empty)
+        val beforeDraw : Game =
+          state
+            .withNextDiscard(_.add(state.nextPlayer.inPlay))
+            .withNextDiscard(_.add(state.nextPlayer.hand))
+            .withNextHand(Hand.empty)
+            .withNextSpent(0)
+            .withNextInPlay(InPlay.empty)
+
+        transition(beforeDraw, DrawFromDeck.newHand)(shuffler)
       }
     }
   }

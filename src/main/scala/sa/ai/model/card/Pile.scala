@@ -55,7 +55,10 @@ case class DiscardPile(cards: Seq[Card])
 
   def add(additionalCards : Traversable[Card]) : DiscardPile =
     DiscardPile(cards ++ additionalCards)
-  
+
+  def add(pile : Pile) : DiscardPile =
+    add(pile.cards)
+
 }
 
 object DiscardPile{

@@ -3,21 +3,23 @@ package sa.ai.rule
 import sa.ai.model.{CleanupPhase, Game}
 import org.specs2.mutable.SpecificationWithJUnit
 import sa.ai.model.card.Card
-import sa.ai.rule.CleanupAction
 
 /**
  * 08/12/13.
  */
 class ShortestGameScenario extends SpecificationWithJUnit
 {
-  def copperEstateShuffler(coppers: Int, estates: Int) : Shuffler =
+  def cardSequenceShuffler(cardTypeCounts : (Card, Int)*) : Shuffler =
     LiteralShuffler(
-      Seq.fill(coppers)(Card.Copper) ++
-        Seq.fill(estates)(Card.Estate))
+      cardTypeCounts.flatMap(c => Seq.fill(c._2)(c._1)))
 
   "The two player shortest game winning scenario" should {
     val firstDraw =
-      Game.twoPlayerFirstAction(copperEstateShuffler(4, 1))
+      Game
+        .twoPlayerFirstAction(
+          cardSequenceShuffler(
+            Card.Copper -> 4, Card.Estate -> 1,
+            Card.Copper -> 3, Card.Estate -> 2))
         .withProvincesRemaining(1)
 
     "Have first draw" in {
@@ -31,10 +33,21 @@ class ShortestGameScenario extends SpecificationWithJUnit
       }
     }
 
+
+    val afterFirstPlayerFirstActionPhase : Game =
+      Ruleset.transition(firstDraw, NoAction)
+
+    "After the first player's first action phase" in {
+      "The first player's hand must consist of a single estate" in {
+        afterFirstPlayerFirstActionPhase.players(0).hand.cards must beEqualTo(Seq(Card.Estate))
+      }
+    }
+
+
     val afterFirstPlayerBuys : Game =
       Ruleset.transition(
-        firstDraw,
-        Seq(NoAction, Buy(Card.Silver), NoBuy))
+        afterFirstPlayerFirstActionPhase,
+        Seq(Buy(Card.Silver), NoBuy))
 
     "After the first player buys" in {
       "Have the first player be in the cleanup phase" in {
@@ -46,22 +59,32 @@ class ShortestGameScenario extends SpecificationWithJUnit
       }
     }
 
-//    "After the "
-
-    val afterBothPlayersFirstBuys : Game =
+    val afterBothPlayersFirstTurns : Game =
       Ruleset.transition(
         afterFirstPlayerBuys,
-        CleanupAction +: Seq(NoAction, NoBuy, CleanupAction))
+        CleanupAction +: Seq(NoAction, NoBuy, CleanupAction)
+      )//(copperEstateShuffler(3, 2))
     
-    "After both players' first buys" in {
+    "After both players' first turns" in {
       "Have the first player own a silver" in {
-        val firstPlayerSilvers = afterBothPlayersFirstBuys.players(0).cards.count(_ == Card.Silver)
+        val firstPlayerSilvers = afterBothPlayersFirstTurns.players(0).cards.count(_ == Card.Silver)
         firstPlayerSilvers must be equalTo 1
       }
-    }
+      "Have the first player's discard pile consist of 4 coppers and 1 estate" in {
+        val discarded : Seq[Card] =
+          afterBothPlayersFirstTurns.players(0).discard.cards
 
-    "After the first turns" in {
-      ok
+        discarded.count(_ == Card.Copper) must beEqualTo(4)
+        discarded must contain( Card.Estate )
+      }
+
+      "Have the first player's hand consist of 3 coppers and 2 estates" in {
+        val secondHand : Seq[Card] =
+          afterBothPlayersFirstTurns.players(0).hand.cards
+
+        secondHand.count(_ == Card.Copper) must beEqualTo(3)
+        secondHand.count(_ == Card.Estate) must beEqualTo(2)
+      }
     }
 
 

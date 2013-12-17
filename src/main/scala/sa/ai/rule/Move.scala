@@ -14,7 +14,7 @@ case object PutSetAsideIntoDiscard extends Move
 
 case class DrawFromDeck(cardCount : Int) extends Move
 object DrawFromDeck {
-  def initialHand = DrawFromDeck(5)
+  def newHand = DrawFromDeck(5)
 }
 
 

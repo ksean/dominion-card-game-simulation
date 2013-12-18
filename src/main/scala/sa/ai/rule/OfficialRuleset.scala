@@ -91,6 +91,11 @@ case class OfficialRuleset(
 
   //--------------------------------------------------------------------------------------------------------------------
   override def transition(state : Game, move : Move) : Game = {
+    {
+      val legalMoves = moves(state)
+      assert(legalMoves.contains(move), s"Illegal move: $move, must be one of: $legalMoves")
+    }
+
     move match {
       case ShuffleDiscardIntoDeck =>
         shuffleDiscardInfoDeck(state)

@@ -9,6 +9,7 @@ case class OfficialRuleset(
       Shuffler.passThrough
   ) extends Ruleset
 {
+  //--------------------------------------------------------------------------------------------------------------------
   override def moves(state:Game) : Set[Move] =
   {
     val currentPlayers = state.players
@@ -86,114 +87,40 @@ case class OfficialRuleset(
     Set(NoBuy) ++ provincePurchase
   }
 
-  override def transition(state:Game, move:Move) : Game = {
+
+
+  //--------------------------------------------------------------------------------------------------------------------
+  override def transition(state : Game, move : Move) : Game = {
     move match {
       case ShuffleDiscardIntoDeck =>
         shuffleDiscardInfoDeck(state)
 
-      case DrawFromDeck(count) => {
-        val playerIndex = state.nextToAct
-        val currentPlayers = state.players
-        val transitioningPlayer = currentPlayers(playerIndex)
-        val (drawn, remaining) = transitioningPlayer.deck.cards.splitAt(count)
-        val nextHand = Hand(transitioningPlayer.hand.cards ++ drawn)
-        val nextDeck = Deck(remaining)
-        val nextPlayerState = Dominion(transitioningPlayer.discard, nextDeck, nextHand)
-        val nextPlayers = currentPlayers.updated(playerIndex, nextPlayerState)
-        val nextNextToAct = (state.nextToAct + 1) % 2
-        val nextPhase = {
-          playerIndex match {
-            case 0 => state.phase
-            case 1 => ActionPhase
-          }
-        }
+      case DrawFromDeck(count) =>
+        drawFromDeck(state, count)
 
-        state.copy(players = nextPlayers, nextToAct = nextNextToAct, phase = nextPhase)
-      }
+      case NoAction =>
+        noAction(state)
 
-      case NoAction => {
-        val treasureInHand : Seq[Card] =
-          state.nextPlayer.hand.cards.filter(_.cardType == Treasure)
-
-        state
-          .withPhase(BuyPhase)
-          .withNextInPlay(_.add(treasureInHand))
-          .withNextHand(_.remove(treasureInHand))
-      }
-
-      case NoBuy => {
+      case NoBuy =>
         state
           .withPhase(CleanupPhase)
-      }
 
-      case PutHandIntoDiscard => {
-        val currentPlayers = state.players
-        val transitioningPlayer = state.nextPlayer
-        val transitioningPlayersDiscard = transitioningPlayer.discard
-        val transitioningPlayersHand = transitioningPlayer.hand
-        val nextDiscard = DiscardPile(transitioningPlayersDiscard.cards ++ transitioningPlayersHand.cards)
-        val nextHand = Hand(Seq())
-        val nextDeck = transitioningPlayer.deck
-        val nextPlayerState = Dominion(nextDiscard,nextDeck,nextHand)
-        val nextPlayers = currentPlayers.updated(state.nextToAct, nextPlayerState)
-        state.copy(players = nextPlayers)
-      }
+      case PutHandIntoDiscard =>
+        putHandIntoDiscard(state)
 
-      case PutSetAsideIntoDiscard => {
+      case PutSetAsideIntoDiscard =>
         state
-      }
 
-      case Buy(card) => {
-        val nextPlayer = state.nextPlayer
-        assert(nextPlayer.buys             >= 1        , "Must have at least one buy"               )
-        assert(nextPlayer.availableWealth  >= card.cost, "Must be able to afford the card"          )
-        assert(state.supply(card).get.size >= 1        , "Must have at least one card in the supply")
-        assert(state.phase                 == BuyPhase , "Must be in the buy phase"                 )
+      case Buy(card) =>
+        buy(state, card)
 
-        val nextNextPlayer : Dominion =
-          nextPlayer
-            .withBuys(nextPlayer.buys - 1)
-            .withSpent(nextPlayer.spent + card.cost)
-            .addDiscard(card)
-
-        val preliminaryNextState : Game =
-          state
-            .withPlayer(state.nextToAct, nextNextPlayer)
-            .subtractSupply(card)
-
-        //        val nextSupply : SupplyPile =
-        //          state.supply(card).get.plusSize(-1)
-        //
-        //
-        //          state.withPlayer(state.nextToAct, nextNextPlayer)
-        //          state.subtractSupply(card)
-
-        val nextState : Game =
-          if (card == Card.Province && preliminaryNextState.basic.province.size == 0) {
-            preliminaryNextState.withPhase(AfterTheGamePhase)
-          } else {
-            preliminaryNextState
-          }
-
-        nextState
-      }
-
-      case CleanupAction => {
-        val beforeDraw : Game =
-          state
-            .withNextDiscard(_.add(state.nextPlayer.inPlay))
-            .withNextDiscard(_.add(state.nextPlayer.hand))
-            .withNextHand(Hand.empty)
-            .withNextSpent(0)
-            .withNextInPlay(InPlay.empty)
-
-        transition(beforeDraw, DrawFromDeck.newHand)
-      }
+      case CleanupAction =>
+        cleanupAction(state)
     }
   }
 
 
-  def shuffleDiscardInfoDeck(state:Game) : Game = {
+  def shuffleDiscardInfoDeck(state : Game) : Game = {
     val playerIndex = state.nextToAct
     val currentPlayers = state.players
     val transitioningPlayer = currentPlayers(playerIndex)
@@ -205,4 +132,95 @@ case class OfficialRuleset(
 
     state.copy(players = nextPlayers, nextToAct = nextNextToAct)
   }
+
+  def drawFromDeck(state:Game, count : Int) : Game = {
+    val playerIndex = state.nextToAct
+    val currentPlayers = state.players
+    val transitioningPlayer = currentPlayers(playerIndex)
+    val (drawn, remaining) = transitioningPlayer.deck.cards.splitAt(count)
+    val nextHand = Hand(transitioningPlayer.hand.cards ++ drawn)
+    val nextDeck = Deck(remaining)
+    val nextPlayerState = Dominion(transitioningPlayer.discard, nextDeck, nextHand)
+    val nextPlayers = currentPlayers.updated(playerIndex, nextPlayerState)
+    val nextNextToAct = (state.nextToAct + 1) % 2
+    val nextPhase = {
+      playerIndex match {
+        case 0 => state.phase
+        case 1 => ActionPhase
+      }
+    }
+
+    state.copy(players = nextPlayers, nextToAct = nextNextToAct, phase = nextPhase)
+  }
+
+  def noAction(state : Game) : Game = {
+    val treasureInHand : Seq[Card] =
+      state.nextPlayer.hand.cards.filter(_.cardType == Treasure)
+
+    state
+      .withPhase(BuyPhase)
+      .withNextInPlay(_.add(treasureInHand))
+      .withNextHand(_.remove(treasureInHand))
+  }
+
+  def putHandIntoDiscard(state : Game) : Game = {
+    val currentPlayers = state.players
+    val transitioningPlayer = state.nextPlayer
+    val transitioningPlayersDiscard = transitioningPlayer.discard
+    val transitioningPlayersHand = transitioningPlayer.hand
+    val nextDiscard = DiscardPile(transitioningPlayersDiscard.cards ++ transitioningPlayersHand.cards)
+    val nextHand = Hand(Seq())
+    val nextDeck = transitioningPlayer.deck
+    val nextPlayerState = Dominion(nextDiscard,nextDeck,nextHand)
+    val nextPlayers = currentPlayers.updated(state.nextToAct, nextPlayerState)
+    state.copy(players = nextPlayers)
+  }
+
+  def buy(state : Game, card : Card) : Game = {
+    val nextPlayer = state.nextPlayer
+    assert(nextPlayer.buys             >= 1        , "Must have at least one buy"               )
+    assert(nextPlayer.availableWealth  >= card.cost, "Must be able to afford the card"          )
+    assert(state.supply(card).get.size >= 1        , "Must have at least one card in the supply")
+    assert(state.phase                 == BuyPhase , "Must be in the buy phase"                 )
+
+    val nextNextPlayer : Dominion =
+      nextPlayer
+        .withBuys(nextPlayer.buys - 1)
+        .withSpent(nextPlayer.spent + card.cost)
+        .addDiscard(card)
+
+    val preliminaryNextState : Game =
+      state
+        .withPlayer(state.nextToAct, nextNextPlayer)
+        .subtractSupply(card)
+
+    //        val nextSupply : SupplyPile =
+    //          state.supply(card).get.plusSize(-1)
+    //
+    //
+    //          state.withPlayer(state.nextToAct, nextNextPlayer)
+    //          state.subtractSupply(card)
+
+    val nextState : Game =
+      if (card == Card.Province && preliminaryNextState.basic.province.size == 0) {
+        preliminaryNextState.withPhase(AfterTheGamePhase)
+      } else {
+        preliminaryNextState
+      }
+
+    nextState
+  }
+
+  def cleanupAction(state : Game) : Game = {
+    val beforeDraw : Game =
+      state
+        .withNextDiscard(_.add(state.nextPlayer.inPlay))
+        .withNextDiscard(_.add(state.nextPlayer.hand))
+        .withNextHand(Hand.empty)
+        .withNextSpent(0)
+        .withNextInPlay(InPlay.empty)
+
+    transition(beforeDraw, DrawFromDeck.newHand)
+  }
+
 }

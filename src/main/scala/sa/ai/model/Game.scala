@@ -101,6 +101,17 @@ case class Game(
   def withNextInPlay(inPlayer: InPlay) : Game =
     withInPlay(nextToAct, inPlayer)
 
+  def withNextBuys(buys : Int) : Game =
+    withSpent(nextToAct, buys)
+
+  def withBuys(player: Int, buys: Int) : Game = {
+    val nextDominion : Dominion =
+      players(player)
+        .copy(buys = buys)
+
+    withPlayer(player, nextDominion)
+  }
+
   def withInPlay(player: Int, inPlay: InPlay) : Game = {
     val nextDominion : Dominion =
       players(player)
@@ -162,8 +173,8 @@ object Game {
   def twoPlayerFirstBuy(shuffler : Shuffler = Shuffler.passThrough) =
     OfficialRuleset(shuffler).transition(
       Game.twoPlayerFirstAction(shuffler),
-      NoBuy
-    ).copy(phase = BuyPhase)
+      NoAction
+    )
 
   val twoPlayerLastBuy = Game(
     0,

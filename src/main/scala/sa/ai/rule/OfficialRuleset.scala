@@ -62,29 +62,34 @@ case class OfficialRuleset(
     val availableSupplyPiles : Set[SupplyPile] =
       state.supply.filter(_.size > 0)
 
+    val nextPlayer : Dominion = state.nextPlayer
+    //assert(nextPlayer.buys > 0, "Must have at least one buy in buy phase [sic]")
+
     val currentPlayerWealth : Int =
-      state.nextPlayer.wealth
+      nextPlayer.wealth
+    
+    val currentPlayerAvailableWealth : Int =
+      currentPlayerWealth - nextPlayer.spent
 
     val affordableSupplyPiles : Set[SupplyPile] =
       availableSupplyPiles.filter(
-        _.card.cost <= currentPlayerWealth)
+        _.card.cost <= currentPlayerAvailableWealth)
 
     val affordableCardToSupply : Map[Card, SupplyPile] =
       affordableSupplyPiles
         .groupBy(_.card)
         .transform((cardType: Card, piles: Set[SupplyPile]) => {
-        assert(piles.size == 1)
-        piles.iterator.next()
-      })
+          assert(piles.size >= 1)
+          piles.iterator.next()
+        })
 
-    val provinceSupply : Option[SupplyPile] =
-      affordableCardToSupply.get(Card.Province)
+    val affordableCardsInSupply : Set[Card] =
+      affordableCardToSupply.keySet
 
-    val provincePurchase : Option[Move] =
-      provinceSupply.map((pile: SupplyPile) =>
-        Buy(pile.card))
+    val affordableBuys : Set[Move] =
+      affordableCardsInSupply.map(Buy)
 
-    Set(NoBuy) ++ provincePurchase
+    Set(NoBuy) ++ affordableBuys
   }
 
 
@@ -224,6 +229,7 @@ case class OfficialRuleset(
         .withNextHand(Hand.empty)
         .withNextSpent(0)
         .withNextInPlay(InPlay.empty)
+        .withNextBuys(1)
 
     transition(beforeDraw, DrawFromDeck.newHand)
   }

@@ -27,12 +27,13 @@
         <scala-major.version>2.10</scala-major.version>
         <scala.version>${scala-major.version}.3</scala.version>
         <scala-plugin.version>3.1.6</scala-plugin.version>
+
         <scalaz.version>7.0.5</scalaz.version>
         <specs2.version>2.3.4</specs2.version>
+        <scalafx.version>8.0.0-M2</scalafx.version>
         <scalacheck.version>1.11.1</scalacheck.version>
         <junit.version>4.11</junit.version>
         <scalamock.version>3.0</scalamock.version>
-        <java.version>1.7</java.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -65,6 +66,12 @@
             <groupId>org.scalaz</groupId>
             <artifactId>scalaz-concurrent_${scala-major.version}</artifactId>
             <version>${scalaz.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scalafx</groupId>
+            <artifactId>scalafx_${scala-major.version}</artifactId>
+            <version>${scalafx.version}</version>
         </dependency>
 
         <dependency>

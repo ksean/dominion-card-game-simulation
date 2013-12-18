@@ -9,6 +9,9 @@ import sa.ai.model.card.Card
  */
 class ShortestGameScenario extends SpecificationWithJUnit
 {
+  val rules =
+    OfficialRuleset()
+
   def cardSequenceShuffler(cardTypeCounts : (Card, Int)*) : Shuffler =
     LiteralShuffler(
       cardTypeCounts.flatMap(c => Seq.fill(c._2)(c._1)))
@@ -35,7 +38,7 @@ class ShortestGameScenario extends SpecificationWithJUnit
 
 
     val afterFirstPlayerFirstActionPhase : Game =
-      Ruleset.transition(firstDraw, NoAction)
+      rules.transition(firstDraw, NoAction)
 
     "After the first player's first action phase" in {
       "The first player's hand must consist of a single estate" in {
@@ -45,7 +48,7 @@ class ShortestGameScenario extends SpecificationWithJUnit
 
 
     val afterFirstPlayerBuys : Game =
-      Ruleset.transition(
+      rules.transition(
         afterFirstPlayerFirstActionPhase,
         Seq(Buy(Card.Silver), NoBuy))
 
@@ -54,13 +57,13 @@ class ShortestGameScenario extends SpecificationWithJUnit
         afterFirstPlayerBuys.phase must be equalTo CleanupPhase
       }
       "Where the only move is the cleanup action" in {
-        val afterFirstPlayerMoves : Set[Move] = Ruleset.moves(afterFirstPlayerBuys)
+        val afterFirstPlayerMoves : Set[Move] = rules.moves(afterFirstPlayerBuys)
         afterFirstPlayerMoves must be equalTo Set(CleanupAction)
       }
     }
 
     val afterBothPlayersFirstTurns : Game =
-      Ruleset.transition(
+      rules.transition(
         afterFirstPlayerBuys,
         CleanupAction +: Seq(NoAction, NoBuy, CleanupAction)
       )//(copperEstateShuffler(3, 2))
@@ -87,7 +90,7 @@ class ShortestGameScenario extends SpecificationWithJUnit
       }
 
       val afterFirstPlayerSecondActionPhase : Game =
-        Ruleset.transition(afterBothPlayersFirstTurns, NoAction)
+        rules.transition(afterBothPlayersFirstTurns, NoAction)
 
       "After the first player's second action phase" in {
         "The first player's hand must consist of two estates" in {
@@ -97,7 +100,7 @@ class ShortestGameScenario extends SpecificationWithJUnit
 
 
       val afterFirstPlayerSecondBuy : Game =
-        Ruleset.transition(
+        rules.transition(
           afterFirstPlayerSecondActionPhase,
           Seq(Buy(Card.Silver), NoBuy))
 
@@ -106,13 +109,13 @@ class ShortestGameScenario extends SpecificationWithJUnit
           afterFirstPlayerSecondBuy.phase must be equalTo CleanupPhase
         }
         "Where the only move is the cleanup action" in {
-          val secondTurnFirstPlayerMoves : Set[Move] = Ruleset.moves(afterFirstPlayerSecondBuy)
+          val secondTurnFirstPlayerMoves : Set[Move] = rules.moves(afterFirstPlayerSecondBuy)
           secondTurnFirstPlayerMoves must be equalTo Set(CleanupAction)
         }
       }
 
       val afterBothPlayersSecondTurns : Game =
-        Ruleset.transition(
+        rules.transition(
           afterFirstPlayerSecondBuy,
           CleanupAction +: Seq(NoAction, NoBuy, CleanupAction)
         )

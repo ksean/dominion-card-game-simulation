@@ -8,7 +8,7 @@ import sa.ai.model.{BeforeTheGamePhase, Game}
  */
 class BeforeTheGameSpec extends SpecificationWithJUnit {
   "Dominion rules for two players" should {
-    val rules = Ruleset
+    val rules = OfficialRuleset()
 
     val initialState = Game.twoPlayerInitialState
     "Describe the initial state" in {
@@ -41,7 +41,7 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
         val shuffle = ShuffleDiscardIntoDeck
 
         "After which" in {
-          val afterFirstPlayerShuffle = Ruleset.transition(initialState, shuffle)
+          val afterFirstPlayerShuffle = rules.transition(initialState, shuffle)
 
           "The first player's discard pile" in {
             val discard = afterFirstPlayerShuffle.players(0).discard
@@ -73,7 +73,7 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
 
 
     val afterSecondPlayerShuffles : Game =
-      Ruleset.transition(
+      rules.transition(
         initialState,
         List.fill(2)(ShuffleDiscardIntoDeck)
       )

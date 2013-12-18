@@ -8,12 +8,12 @@ import sa.ai.model.{BuyPhase, Game}
  */
 class FirstBuySpec extends SpecificationWithJUnit {
   "The first buy phase" should {
-    val inBuyPhase = Game.twoPlayerFirstBuy
+    val inBuyPhase = Game.twoPlayerFirstBuy()
     inBuyPhase.phase must be equalTo BuyPhase
 
     "Have a set of moves" in {
       val movesInBuyPhase : Set[Move] =
-        Ruleset.moves(inBuyPhase)
+        OfficialRuleset().moves(inBuyPhase)
 
       "Where it is possible to make no buy" in {
         movesInBuyPhase must contain(NoBuy)

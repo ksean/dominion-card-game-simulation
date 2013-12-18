@@ -149,20 +149,19 @@ object Game {
     BeforeTheGamePhase
   )
 
-  def twoPlayerFirstAction(implicit shuffler : Shuffler) =
-    Ruleset.transition(
+  def twoPlayerFirstAction(shuffler : Shuffler = Shuffler.passThrough) =
+    OfficialRuleset(shuffler).transition(
       Game.twoPlayerInitialState,
       List(
         ShuffleDiscardIntoDeck,
         ShuffleDiscardIntoDeck,
         DrawFromDeck.newHand,
         DrawFromDeck.newHand
-      )
-    )(shuffler)
+      ))
 
-  val twoPlayerFirstBuy =
-    Ruleset.transition(
-      Game.twoPlayerFirstAction,
+  def twoPlayerFirstBuy(shuffler : Shuffler = Shuffler.passThrough) =
+    OfficialRuleset(shuffler).transition(
+      Game.twoPlayerFirstAction(shuffler),
       NoBuy
     ).copy(phase = BuyPhase)
 

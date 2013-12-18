@@ -9,6 +9,9 @@ import sa.ai.model.card.{InPlay, Card}
  * Time: 6:08 PM
  */
 class LastProvinceSpec extends SpecificationWithJUnit {
+  val rules =
+    OfficialRuleset()
+
   "The two-player game-winning province purchase" should {
     val winningState : Game =
       Game
@@ -69,7 +72,7 @@ class LastProvinceSpec extends SpecificationWithJUnit {
       Buy(Card.Province)
 
     "Have available actions" in {
-      val availableActions = Ruleset.moves(winningState)
+      val availableActions = rules.moves(winningState)
 
       "Including purchase of a province" in {
         availableActions must contain( purchaseOfProvince )
@@ -78,7 +81,7 @@ class LastProvinceSpec extends SpecificationWithJUnit {
 
     "Have the ability to purchase a province" in {
       val terminalState : Game =
-        Ruleset.transition(winningState, purchaseOfProvince)
+        rules.transition(winningState, purchaseOfProvince)
 
       "Thereby ending the game" in {
         terminalState.phase must beEqualTo( AfterTheGamePhase )

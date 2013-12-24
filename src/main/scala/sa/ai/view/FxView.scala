@@ -5,65 +5,161 @@ import javafx.scene.shape.Rectangle
 import scalafx.scene.{Node, Scene}
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
-import scalafx.scene.layout.{VBox, HBox}
+import scalafx.scene.layout.{Pane, VBox, HBox}
 import scalafx.geometry.Insets
 import scalafx.scene.shape.{Arc, Circle}
-import scalafx.scene.control.{Label, ComboBox}
-import sa.ai.model.Game
+import scalafx.scene.control.{ScrollPane, Label, ComboBox}
+import sa.ai.model.{Dominion, Game}
+import sa.ai.model.card._
 
 /**
- * 17/12/13 10:50 PM
+ * Visualize a Dominion game state.
  */
 case object FxView extends JFXApp
 {
   val state : Game =
     Game.twoPlayerInitialState
 
-  val comboBox = new ComboBox() {
-    editable = true
+  def cardView(card: Card) : Node =
+    new Label(s"${card.name}")
+
+  def cardSeqView(cards: Seq[Card]) : Node =
+    new HBox { content =
+      ViewUtils.row(
+        cards.map(cardView)
+      )
+    }
+
+  def supplyPileView(pile: SupplyPile) : Node =
+    new VBox { content =
+      Seq(
+        cardView(pile.card),
+        new Label(s"# ${pile.size}")
+      )
+    }
+
+  def dominionView(dominion : Dominion) : Node = {
+    val attributes : Node =
+      new HBox {
+        content = ViewUtils.row(Seq(
+          new Label(s"Buys: ${dominion.buys}"),
+          new Label(s"Wealth: ${dominion.wealth}")
+        ))
+      }
+
+    val inPlayCards : Node =
+      ViewUtils.row(
+          dominion.inPlay.cards.map(cardView))
+
+    val handCards : Node =
+      ViewUtils.row(
+        dominion.hand.cards.map(cardView))
+
+    val deckCards : Node =
+      ViewUtils.row(
+        dominion.deck.cards.map(cardView))
+
+    val discardCards : Node =
+      ViewUtils.row(
+        dominion.discard.cards.map(cardView))
+
+    ViewUtils.column(Seq(
+      attributes,
+      ViewUtils.labeled("In Play:", inPlayCards),
+      ViewUtils.labeled("Hand:", handCards),
+      ViewUtils.labeled("Deck:", deckCards),
+      ViewUtils.labeled("Discard:", discardCards)
+    ))
   }
 
-  val stateView : Node = {
-    val supplyPiles : Seq[Node] =
-      state.basic.supply.toSeq.flatMap(supply => {
-        Seq(
-          new Label(s"${supply.card.name}: ${supply.cards.size}"),
-          new HBox {prefWidth = 10}
+  def dominionSeqView(dominions : Seq[Dominion]) : Node = {
+    ViewUtils.column(
+      dominions.zipWithIndex.map((dominionWithIndex: (Dominion, Int)) => {
+        val (dominion, index) = dominionWithIndex
+
+        ViewUtils.labeled(
+          s"Player # $index:",
+          dominionView(dominion)
         )
       })
+    )
+  }
+
+
+  val stateView : Node = {
+    val basicSupplyPiles : Node = {
+      val basicSupplyView : Node =
+        ViewUtils.row(
+          state.basic.supply.toSeq.map(supplyPileView))
+
+      val trashView : Node = {
+        val trash = state.basic.trash.cards
+        if (trash.isEmpty) {
+          new Label("[Empty]")
+        } else {
+          ViewUtils.row(
+            trash.map(cardView))
+        }
+      }
+
+      new VBox { content =
+        ViewUtils.labeled(
+          "Basic:",
+          ViewUtils.column(Seq(
+            ViewUtils.labeled(
+              "Supply:",
+              basicSupplyView),
+            ViewUtils.labeled(
+              "Trash:",
+              trashView)
+          ))
+        )
+      }
+    }
+
+    val kingdomSupplyPiles : Node =
+      ViewUtils.labeled(
+        "Kingdom:",
+        ViewUtils.row(
+          state.kingdom.supply.toSeq.map(supplyPileView)))
 
     new VBox {
-      content = Seq(
-        new Label(s"Next to act index: ${state.nextToAct}"),
-        new Label(s"Phase is: ${state.phase}"),
-        new Label(s"Provinces left: ${state.basic.province.size}"),
-        new HBox { prefHeight = 5 },
-        new HBox {
-          content = supplyPiles
-        }
-      )
+      content =
+        ViewUtils.column(Seq(
+          new VBox { content = Seq(
+            new Label(s"Next to act index: ${state.nextToAct}"),
+            new Label(s"Phase is: ${state.phase}"),
+            new Label(s"Provinces left: ${state.basic.province.size}"))
+          },
+          basicSupplyPiles,
+          kingdomSupplyPiles,
+          ViewUtils.labeled(
+            "Player Dominions:",
+            dominionSeqView(state.players))
+        ))
     }
   }
 
   stage = new PrimaryStage {
-    width = 800
-    height = 600
+    width = 600
+    height = 750
+
     scene = new Scene {
-      content = Seq(
-        new VBox {
-          content = Seq(
-            new Label("Dominion state:"),
-            new HBox {
-              content = Seq(
-                new HBox {
-                  prefWidth = 10
-                },
+      root =
+        new ScrollPane {
+          fitToWidth = true
+          fitToHeight = true
+
+          content =
+            ViewUtils.indent(
+              ViewUtils.labeled(
+                "Dominion State:",
                 stateView
-              )
-            }
-          )
+              ),
+              top = 10,
+              left = 10
+            )
         }
-      )
     }
   }
 }

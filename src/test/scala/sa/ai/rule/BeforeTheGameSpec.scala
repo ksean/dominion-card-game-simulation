@@ -31,14 +31,14 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
             }
 
             "Requiring a discard pile shuffle" in {
-              firstMove must be equalTo ShuffleDiscardIntoDeck
+              firstMove must be equalTo StartTheGameAction
             }
           }
         }
       }
 
-      "Where the first player needs to shuffle" in {
-        val shuffle = ShuffleDiscardIntoDeck
+      "Where the first player needs to start the game" in {
+        val shuffle = StartTheGameAction
 
         "After which" in {
           val afterFirstPlayerShuffle = rules.transition(initialState, shuffle)
@@ -54,8 +54,16 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
           "The first player's deck" in {
             val deck = afterFirstPlayerShuffle.players(0).deck
 
-            "Has 10 cards" in {
-              deck.cards.size must be equalTo 10
+            "Has 5 cards" in {
+              deck.cards.size must be equalTo 5
+            }
+          }
+
+          "The first player's hand" in {
+            val hand = afterFirstPlayerShuffle.players(0).hand
+
+            "Has 5 cards" in {
+              hand.cards.size must be equalTo 5
             }
           }
 
@@ -75,41 +83,37 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
     val afterSecondPlayerShuffles : Game =
       rules.transition(
         initialState,
-        List.fill(2)(ShuffleDiscardIntoDeck)
+        List.fill(2)(StartTheGameAction)
       )
-    "Start by both players shuffling" in {
+    "Start by both players shuffling and drawing 5 cards" in {
       "Where the second player shuffles after the first player" in {
         "Both having empty discard piles" in {
           afterSecondPlayerShuffles.players.flatMap(_.discard.cards) must beEmpty
         }
 
-        "Both having the same cards in their decks that were originally discarded" in {
-          foreach( 0 to 1 ) { playerIndex =>
-            val discardBefore = initialState.players(playerIndex).discard.cards
-            val deckAfter = afterSecondPlayerShuffles.players(playerIndex).deck.cards
-
-            discardBefore.size must be equalTo deckAfter.size
-            discardBefore must containTheSameElementsAs( deckAfter )
-          }
+        "Both having 5 cards in their decks" in {
+          afterSecondPlayerShuffles.players(0).deck.cards.size must be equalTo 5
+          afterSecondPlayerShuffles.players(1).deck.cards.size must be equalTo 5
         }
 
-        "Both having an empty hand" in {
-          afterSecondPlayerShuffles.players.flatMap(_.hand.cards) must beEmpty
+        "Both having 5 cards in their hands" in {
+          afterSecondPlayerShuffles.players(0).hand.cards.size must be equalTo 5
+          afterSecondPlayerShuffles.players(1).hand.cards.size must be equalTo 5
         }
       }
     }
 
-    "Continues by both players drawing cards" in {
+    /*"Continues by both players drawing cards" in {
       val afterBothPlayersDraw = {
-        val firstPlayerDraws = DrawFromDeck.newHand
-        afterSecondPlayerShuffles.nextToAct must be equalTo 0
+          val firstPlayerDraws = StartTheGameAction
+          afterSecondPlayerShuffles.nextToAct must be equalTo 0
 
         rules.moves(afterSecondPlayerShuffles) must be equalTo Set( firstPlayerDraws )
 
         val afterFirstPlayerDraws =
           rules.transition(afterSecondPlayerShuffles, firstPlayerDraws)
 
-        val secondPlayerDraws = DrawFromDeck.newHand
+        val secondPlayerDraws = StartTheGameAction
         afterFirstPlayerDraws.nextToAct must be equalTo 1
 
         rules.moves(afterFirstPlayerDraws) must be equalTo Set( secondPlayerDraws )
@@ -131,6 +135,6 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
           _.hand.cards must have size 5
         }
       }
-    }
+    }*/
   }
 }

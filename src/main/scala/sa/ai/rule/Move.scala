@@ -7,6 +7,8 @@ import sa.ai.model.card.Card
  */
 sealed trait Move
 
+case object StartTheGameAction     extends Move
+
 case object ShuffleDiscardIntoDeck extends Move
 case object PutHandIntoDiscard     extends Move
 case object PutSetAsideIntoDiscard extends Move

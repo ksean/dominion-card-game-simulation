@@ -101,6 +101,10 @@ case class Game(
   def withNextInPlay(inPlayer: InPlay) : Game =
     withInPlay(nextToAct, inPlayer)
 
+  def withNextNextToAct(player: Int) : Game = {
+    copy(nextToAct = player)
+  }
+
   def withInPlay(player: Int, inPlay: InPlay) : Game = {
     val nextDominion : Dominion =
       players(player)
@@ -153,16 +157,14 @@ object Game {
     OfficialRuleset(shuffler).transition(
       Game.twoPlayerInitialState,
       List(
-        ShuffleDiscardIntoDeck,
-        ShuffleDiscardIntoDeck,
-        DrawFromDeck.newHand,
-        DrawFromDeck.newHand
-      ))
+        StartTheGameAction,
+        StartTheGameAction
+      )).copy(phase = ActionPhase)
 
   def twoPlayerFirstBuy(shuffler : Shuffler = Shuffler.passThrough) =
     OfficialRuleset(shuffler).transition(
       Game.twoPlayerFirstAction(shuffler),
-      NoBuy
+      NoAction
     ).copy(phase = BuyPhase)
 
   val twoPlayerLastBuy = Game(

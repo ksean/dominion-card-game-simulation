@@ -15,11 +15,8 @@ import sa.ai.model.card._
 /**
  * Visualize a Dominion game state.
  */
-case object FxView extends JFXApp
+object FxView extends JFXApp
 {
-  val state : Game =
-    Game.twoPlayerInitialState
-
   def cardView(card: Card) : Node =
     new Label(s"${card.name}")
 
@@ -86,7 +83,7 @@ case object FxView extends JFXApp
   }
 
 
-  val stateView : Node = {
+  def stateView(state : Game) : Node = {
     val basicSupplyPiles : Node = {
       val basicSupplyView : Node =
         ViewUtils.row(
@@ -137,29 +134,6 @@ case object FxView extends JFXApp
             "Player Dominions:",
             dominionSeqView(state.players))
         ))
-    }
-  }
-
-  stage = new PrimaryStage {
-    width = 600
-    height = 750
-
-    scene = new Scene {
-      root =
-        new ScrollPane {
-          fitToWidth = true
-          fitToHeight = true
-
-          content =
-            ViewUtils.indent(
-              ViewUtils.labeled(
-                "Dominion State:",
-                stateView
-              ),
-              top = 10,
-              left = 10
-            )
-        }
     }
   }
 }

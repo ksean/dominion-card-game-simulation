@@ -145,7 +145,7 @@ case class OfficialRuleset(
     val currentPlayers = state.players
     val transitioningPlayer = currentPlayers(playerIndex)
     val nextDiscardPile = DiscardPile(Seq())
-    val nextDeck = shuffler.shuffle(transitioningPlayer.discard)
+    val nextDeck = Deck(transitioningPlayer.deck.cards ++ shuffler.shuffle(transitioningPlayer.discard).cards)
     val nextPlayerState = Dominion(nextDiscardPile, nextDeck, transitioningPlayer.hand)
     val nextPlayers = currentPlayers.updated(playerIndex, nextPlayerState)
 //    val nextNextToAct = (state.nextToAct + 1) % 2
@@ -166,14 +166,14 @@ case class OfficialRuleset(
     val currentPlayers = state.players
     val transitioningPlayer = currentPlayers(playerIndex)
     // TODO: shuffle discard into deck if deck size is 0
-//    if (transitioningPlayer.deck.cards.size == 0) {
-//      shuffleDiscardIntoDeck(state)
-//    }
-    val (drawn, remaining) = transitioningPlayer.deck.cards.splitAt(count)
-    val nextHand = Hand(transitioningPlayer.hand.cards ++ drawn)
+    val shuffleState = if (transitioningPlayer.deck.cards.size < count) shuffleDiscardIntoDeck(state) else state
+    val afterShufflePlayers = shuffleState.players
+    val afterShuffleTransitioningPlayer = afterShufflePlayers(playerIndex)
+    val (drawn, remaining) = afterShuffleTransitioningPlayer.deck.cards.splitAt(count)
+    val nextHand = Hand(afterShuffleTransitioningPlayer.hand.cards ++ drawn)
     val nextDeck = Deck(remaining)
-    val nextPlayerState = Dominion(transitioningPlayer.discard, nextDeck, nextHand)
-    val nextPlayers = currentPlayers.updated(playerIndex, nextPlayerState)
+    val nextPlayerState = Dominion(afterShuffleTransitioningPlayer.discard, nextDeck, nextHand)
+    val nextPlayers = afterShufflePlayers.updated(playerIndex, nextPlayerState)
 //    val nextNextToAct = (state.nextToAct + 1) % 2
     /*val nextPhase = {
       playerIndex match {

@@ -15,7 +15,7 @@ case class OfficialRuleset(
     val currentPlayers = state.players
     val nextToAct = state.nextToAct
     val nextPlayerHand = currentPlayers(nextToAct).hand.cards
-    val nextPlayerDeck = currentPlayers(nextToAct).deck.cards
+//    val nextPlayerDeck = currentPlayers(nextToAct).deck.cards
     if (state.phase == BeforeTheGamePhase)
     {
       Set(StartTheGameAction)

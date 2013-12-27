@@ -1,6 +1,6 @@
 package sa.ai.rule
 
-import sa.ai.model.{CleanupPhase, Game}
+import sa.ai.model.{AfterTheGamePhase, CleanupPhase, Game}
 import org.specs2.mutable.SpecificationWithJUnit
 import sa.ai.model.card.Card
 
@@ -208,13 +208,13 @@ class ShortestGameScenario extends SpecificationWithJUnit
           Seq(NoAction, NoBuy, CleanupAction)
       )
 
-    "On the last buy of the game" in {
-      val beforeLastBuy : Game =
-//        afterBothPlayersFourthTurns
-        rules.transition(
-          afterBothPlayersFourthTurns,
-          NoAction)
 
+    val beforeLastBuy : Game =
+      rules.transition(
+        afterBothPlayersFourthTurns,
+        NoAction)
+
+    "Before the last buy of the game" in {
       "First player" in {
         val firstPlayer =
           beforeLastBuy.players(0)
@@ -223,7 +223,7 @@ class ShortestGameScenario extends SpecificationWithJUnit
           beforeLastBuy.nextToAct must be equalTo 0
         }
 
-        "Hand has 3 silvers and 2 coppers" in {
+        "Has hand with 3 silvers and 2 coppers" in {
           val lastBuyPhaseCardsInPlay : Seq[Card] =
             firstPlayer.inPlay.cards
           
@@ -241,15 +241,23 @@ class ShortestGameScenario extends SpecificationWithJUnit
       }
     }
 
-    /* val afterSecondBuys : Game =
-       Ruleset.transition(
-         afterFirstBuys,
-         Seq(
-           NoAction, Buy(Card.Silver), NoBuy,
-           NoAction, NoBuy))
-     "After the second time each player buys" in {
-       ok
-     }*/
-    
+    "After buying the last province" in {
+      val afterLastBuy : Game =
+        rules.transition(
+          beforeLastBuy,
+          Buy(Card.Province))
+
+      "The game must have terminated" in {
+        afterLastBuy.phase must be equalTo AfterTheGamePhase
+      }
+
+      "With the first player as the winner" in {
+        val winners : Set[Int] =
+          afterLastBuy.currentWinners()
+
+        winners.size must be equalTo 1
+        winners must contain(0)
+      }
+    }
   }
 }

@@ -3,6 +3,7 @@ package sa.ai.model
 import sa.ai.model.card._
 import sa.ai.rule._
 import sa.ai.rule.OfficialRuleset
+import scalaz.Digit._0
 
 /**
  * Dominion game
@@ -38,8 +39,34 @@ case class Game(
     }
     
   }
-    
-    
+
+
+  def currentWinners() : Set[Int] = {
+    val victoryPoints : Seq[Int] =
+      (0 until players.size).map(victoryPoint)
+
+    val maxPoints : Int =
+      victoryPoints.max
+
+    val oneWinner =
+      victoryPoints.count(_ == maxPoints) == 1
+
+    if (oneWinner)
+    {
+      Set(victoryPoints.indexOf(maxPoints))
+    }
+    else
+    {
+//      val winningCandidates : Set[Int] =
+//        victoryPoints.index
+
+
+      ???
+    }
+  }
+
+  def victoryPoint(playerIndex : Int) : Int =
+    players(playerIndex).cards.map(_.victory).sum
 
 
   def withProvincesRemaining(count: Int) : Game = {

@@ -145,7 +145,10 @@ case class OfficialRuleset(
     val currentPlayers = state.players
     val transitioningPlayer = currentPlayers(playerIndex)
     val nextDiscardPile = DiscardPile(Seq())
-    val nextDeck = Deck(transitioningPlayer.deck.cards ++ shuffler.shuffle(transitioningPlayer.discard).cards)
+
+    // transitioningPlayer.deck.cards
+    val nextDeck = Deck(shuffler.shuffle(transitioningPlayer.discard).cards)
+
     val nextPlayerState = Dominion(nextDiscardPile, nextDeck, transitioningPlayer.hand)
     val nextPlayers = currentPlayers.updated(playerIndex, nextPlayerState)
 //    val nextNextToAct = (state.nextToAct + 1) % 2
@@ -158,15 +161,17 @@ case class OfficialRuleset(
     val playerIndex = state.nextToAct
     val afterShuffle = shuffleDiscardIntoDeck(state)
     val afterDraw = drawFromDeck(afterShuffle, 5)
-    afterDraw.copy(nextToAct = ((playerIndex + 1) % 2))
+    afterDraw.copy(nextToAct = (playerIndex + 1) % 2)
   }
 
   def drawFromDeck(state:Game, count : Int) : Game = {
     val playerIndex = state.nextToAct
     val currentPlayers = state.players
     val transitioningPlayer = currentPlayers(playerIndex)
+
     // TODO: shuffle discard into deck if deck size is 0
     val shuffleState = if (transitioningPlayer.deck.cards.size < count) shuffleDiscardIntoDeck(state) else state
+
     val afterShufflePlayers = shuffleState.players
     val afterShuffleTransitioningPlayer = afterShufflePlayers(playerIndex)
     val (drawn, remaining) = afterShuffleTransitioningPlayer.deck.cards.splitAt(count)
@@ -252,11 +257,11 @@ case class OfficialRuleset(
         .withNextHand(Hand.empty)
         .withNextSpent(0)
         .withNextInPlay(InPlay.empty)
-        .withPhase(ActionPhase)
 
     val afterDraw : Game =
       drawFromDeck(beforeDraw, 5)
         .withNextNextToAct((playerIndex + 1) % 2)
+        .withPhase(ActionPhase)
 
     afterDraw
   }

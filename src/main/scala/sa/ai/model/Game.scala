@@ -2,10 +2,7 @@ package sa.ai.model
 
 import sa.ai.model.card._
 import sa.ai.rule._
-import sa.ai.rule.ShuffleDiscardIntoDeck
-import sa.ai.rule.ShuffleDiscardIntoDeck
-import sa.ai.rule.PutSetAsideIntoDiscard
-import sa.ai.rule.PutHandIntoDiscard
+import sa.ai.rule.OfficialRuleset
 
 /**
  * Dominion game
@@ -153,17 +150,17 @@ object Game {
     BeforeTheGamePhase
   )
 
-  def twoPlayerFirstAction(shuffler : Shuffler = Shuffler.passThrough) =
-    OfficialRuleset(shuffler).transition(
+  def twoPlayerFirstAction(rules : Ruleset) =
+    rules.transition(
       Game.twoPlayerInitialState,
       List(
         StartTheGameAction,
         StartTheGameAction
       )).copy(phase = ActionPhase)
 
-  def twoPlayerFirstBuy(shuffler : Shuffler = Shuffler.passThrough) =
-    OfficialRuleset(shuffler).transition(
-      Game.twoPlayerFirstAction(shuffler),
+  def twoPlayerFirstBuy(rules : Ruleset) =
+    rules.transition(
+      Game.twoPlayerFirstAction(rules),
       NoAction
     ).copy(phase = BuyPhase)
 

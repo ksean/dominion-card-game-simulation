@@ -10,19 +10,33 @@ import sa.ai.model.card.Card
 class ShortestGameScenario extends SpecificationWithJUnit
 {
   val rules =
-    OfficialRuleset()
+    OfficialRuleset(
+      cardSequenceShuffler(
+        // 1st player before the game
+        Card.Copper -> 4, Card.Estate -> 1, Card.Copper -> 3, Card.Estate -> 2,
+
+        // 2nd player before the game
+        Card.Copper -> 3, Card.Estate -> 2, Card.Copper -> 4, Card.Estate -> 1,
+
+        // 1st player 2nd cleanup
+        Card.Copper -> 3, Card.Estate -> 2, Card.Copper -> 4, Card.Estate -> 1, Card.Silver -> 2,
+
+        // 2nd player 2nd cleanup
+        Card.Copper -> 3, Card.Estate -> 1, Card.Copper -> 4, Card.Estate -> 1,
+
+        // 1st player 3rd draw
+        Card.Silver -> 1
+      ))
+
 
   def cardSequenceShuffler(cardTypeCounts : (Card, Int)*) : Shuffler =
-    LiteralShuffler(
+    new LiteralShuffler(
       cardTypeCounts.flatMap(c => Seq.fill(c._2)(c._1)))
 
   "The two player shortest game winning scenario" should {
     val firstDraw =
       Game
-        .twoPlayerFirstAction(
-          cardSequenceShuffler(
-            Card.Copper -> 4, Card.Estate -> 1,
-            Card.Copper -> 3, Card.Estate -> 2))
+        .twoPlayerFirstAction(rules)
         .withProvincesRemaining(1)
 
     "Have first draw" in {
@@ -123,23 +137,30 @@ class ShortestGameScenario extends SpecificationWithJUnit
       )
 
     "After both players' second turns" in {
-      "Have the first player own 2 silvers" in {
-        val firstPlayerSilvers = afterBothPlayersSecondTurns.players(0).cards.count(_ == Card.Silver)
-        firstPlayerSilvers must be equalTo 2
-      }
-      "Have the first player's discard pile consist of nothing" in {
-        val discarded : Seq[Card] =
-          afterBothPlayersSecondTurns.players(0).discard.cards
+      "Have the first player" in {
+        val firstPlayerThirdTurn =
+          afterBothPlayersSecondTurns.players(0)
 
-        discarded.size must be equalTo 0
-      }
+        "Own 2 silvers" in {
+          val firstPlayerCards =
+            firstPlayerThirdTurn.cards
 
-      "Have the first player's hand consist of 3 coppers and 2 estates" in {
-        val thirdHand : Seq[Card] =
-          afterBothPlayersSecondTurns.players(0).hand.cards
+          val firstPlayerSilvers = firstPlayerCards.count(_ == Card.Silver)
+          firstPlayerSilvers must be equalTo 2
+        }
+        "Discard pile consist of nothing" in {
+          val discarded : Seq[Card] =
+            firstPlayerThirdTurn.discard.cards
 
-        thirdHand.count(_ == Card.Copper) must beEqualTo(3)
-        thirdHand.count(_ == Card.Estate) must beEqualTo(2)
+          discarded.size must be equalTo 0
+        }
+        "Hand consist of 3 coppers and 2 estates" in {
+          val thirdHand : Seq[Card] =
+            firstPlayerThirdTurn.hand.cards
+
+          thirdHand.count(_ == Card.Copper) must beEqualTo(3)
+          thirdHand.count(_ == Card.Estate) must beEqualTo(2)
+        }
       }
     }
 

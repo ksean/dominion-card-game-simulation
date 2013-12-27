@@ -113,7 +113,7 @@ case class OfficialRuleset(
         startTheGameAction(state)
 
       case ShuffleDiscardIntoDeck =>
-        shuffleDiscardIntoDeck(state)
+        shuffleDiscardUnderDeck(state)
 
       case DrawFromDeck(count) =>
         drawFromDeck(state, count)
@@ -140,14 +140,14 @@ case class OfficialRuleset(
   }
 
 
-  def shuffleDiscardIntoDeck(state : Game) : Game = {
+  def shuffleDiscardUnderDeck(state : Game) : Game = {
     val playerIndex = state.nextToAct
     val currentPlayers = state.players
     val transitioningPlayer = currentPlayers(playerIndex)
     val nextDiscardPile = DiscardPile(Seq())
 
     // transitioningPlayer.deck.cards
-    val nextDeck = Deck(shuffler.shuffle(transitioningPlayer.discard).cards)
+    val nextDeck = Deck(transitioningPlayer.deck.cards ++ shuffler.shuffle(transitioningPlayer.discard).cards)
 
     val nextPlayerState = Dominion(nextDiscardPile, nextDeck, transitioningPlayer.hand)
     val nextPlayers = currentPlayers.updated(playerIndex, nextPlayerState)
@@ -159,7 +159,7 @@ case class OfficialRuleset(
 
   def startTheGameAction(state: Game) : Game = {
     val playerIndex = state.nextToAct
-    val afterShuffle = shuffleDiscardIntoDeck(state)
+    val afterShuffle = shuffleDiscardUnderDeck(state)
     val afterDraw = drawFromDeck(afterShuffle, 5)
     afterDraw.copy(nextToAct = (playerIndex + 1) % 2)
   }
@@ -169,12 +169,19 @@ case class OfficialRuleset(
     val currentPlayers = state.players
     val transitioningPlayer = currentPlayers(playerIndex)
 
-    // TODO: shuffle discard into deck if deck size is 0
-    val shuffleState = if (transitioningPlayer.deck.cards.size < count) shuffleDiscardIntoDeck(state) else state
+    val cardsBeforeShuffle = transitioningPlayer.deck.cards.size
+    val cardsIfNeedShuffle = if (cardsBeforeShuffle == 0) {
+      shuffleDiscardUnderDeck(state)
+    } else if(cardsBeforeShuffle < count) {
+      shuffleDiscardUnderDeck(state)
+    } else state
 
-    val afterShufflePlayers = shuffleState.players
+    val afterShufflePlayers = cardsIfNeedShuffle.players
     val afterShuffleTransitioningPlayer = afterShufflePlayers(playerIndex)
     val (drawn, remaining) = afterShuffleTransitioningPlayer.deck.cards.splitAt(count)
+
+    println(s"drawing from deck: $playerIndex | $count | ${drawn.map(_.name)} | ${remaining.map(_.name)}")
+
     val nextHand = Hand(afterShuffleTransitioningPlayer.hand.cards ++ drawn)
     val nextDeck = Deck(remaining)
     val nextPlayerState = Dominion(afterShuffleTransitioningPlayer.discard, nextDeck, nextHand)

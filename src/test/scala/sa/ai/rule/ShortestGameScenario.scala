@@ -12,20 +12,31 @@ class ShortestGameScenario extends SpecificationWithJUnit
   val rules =
     OfficialRuleset(
       cardSequenceShuffler(
-        // 1st player before the game
-        Card.Copper -> 4, Card.Estate -> 1, Card.Copper -> 3, Card.Estate -> 2,
+        // 1st player before the game draw
+        Card.Copper -> 4, Card.Estate -> 1,
+          Card.Copper -> 3, Card.Estate -> 2,
 
-        // 2nd player before the game
-        Card.Copper -> 3, Card.Estate -> 2, Card.Copper -> 4, Card.Estate -> 1,
+        // 2nd player before the game draw
+        Card.Copper -> 3, Card.Estate -> 2,
+          Card.Copper -> 4, Card.Estate -> 1,
 
-        // 1st player 2nd cleanup
-        Card.Copper -> 3, Card.Estate -> 2, Card.Copper -> 4, Card.Estate -> 1, Card.Silver -> 2,
+        // 1st player 2nd cleanup draw
+        Card.Copper -> 3, Card.Estate -> 2,
+          Card.Copper -> 4, Card.Estate -> 1,
+          Card.Silver -> 2, // silver is partial, continued in 3rd draw
 
-        // 2nd player 2nd cleanup
-        Card.Copper -> 3, Card.Estate -> 1, Card.Copper -> 4, Card.Estate -> 1,
+        // 2nd player 2nd cleanup draw
+        Card.Copper -> 3, Card.Estate -> 2,
+          Card.Copper -> 4, Card.Estate -> 1,
 
         // 1st player 3rd draw
-        Card.Silver -> 1
+        Card.Silver -> 1, Card.Copper -> 2,
+          // the rest are arbitrary
+        Card.Silver -> 3, Card.Copper -> 9,
+//          Card.Copper -> 9,
+
+        // 2nd player 3rd draw - arbitrary
+        Card.Copper -> 3, Card.Estate -> 2, Card.Copper -> 4, Card.Estate -> 1
       ))
 
 
@@ -158,8 +169,60 @@ class ShortestGameScenario extends SpecificationWithJUnit
           val thirdHand : Seq[Card] =
             firstPlayerThirdTurn.hand.cards
 
-          thirdHand.count(_ == Card.Copper) must beEqualTo(3)
-          thirdHand.count(_ == Card.Estate) must beEqualTo(2)
+          thirdHand.count(_ == Card.Copper) must be equalTo 3
+          thirdHand.count(_ == Card.Estate) must be equalTo 2
+        }
+      }
+    }
+
+
+    val afterBothPlayersThirdTurns : Game =
+      rules.transition(
+        afterBothPlayersSecondTurns,
+        Seq(NoAction, Buy(Card.Silver), NoBuy, CleanupAction) ++
+          Seq(NoAction, NoBuy, CleanupAction)
+      )
+
+
+    "After both players' third turns" in {
+      "Have the first player" in {
+        "Be next to act" in {
+          afterBothPlayersThirdTurns.nextToAct must be equalTo 0
+        }
+
+        val firstPlayerFourthTurn =
+          afterBothPlayersThirdTurns.players(0)
+
+        "Own 3 silvers" in {
+          val firstPlayerSilvers = firstPlayerFourthTurn.cards.count(_ == Card.Silver)
+          firstPlayerSilvers must be equalTo 3
+        }
+      }
+    }
+
+
+    val afterBothPlayersFourthTurns : Game =
+      rules.transition(
+        afterBothPlayersThirdTurns,
+        Seq(NoAction, NoBuy, CleanupAction) ++
+          Seq(NoAction, NoBuy, CleanupAction)
+      )
+
+    "On the last action of the game" in {
+      "First player" in {
+        val firstPlayer =
+          afterBothPlayersFourthTurns.players(0)
+
+        "Is next to act" in {
+          afterBothPlayersFourthTurns.nextToAct must be equalTo 0
+        }
+
+        "Hand has 3 silvers and 2 coppers" in {
+          val lastActionHand : Seq[Card] =
+            firstPlayer.hand.cards
+
+          lastActionHand.count(_ == Card.Silver) must be equalTo 3
+          lastActionHand.count(_ == Card.Copper) must be equalTo 2
         }
       }
     }

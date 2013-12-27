@@ -180,7 +180,7 @@ case class OfficialRuleset(
     val afterShuffleTransitioningPlayer = afterShufflePlayers(playerIndex)
     val (drawn, remaining) = afterShuffleTransitioningPlayer.deck.cards.splitAt(count)
 
-    println(s"drawing from deck: $playerIndex | $count | ${drawn.map(_.name)} | ${remaining.map(_.name)}")
+//    println(s"drawing from deck: $playerIndex | $count | ${drawn.map(_.name)} | ${remaining.map(_.name)}")
 
     val nextHand = Hand(afterShuffleTransitioningPlayer.hand.cards ++ drawn)
     val nextDeck = Deck(remaining)

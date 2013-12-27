@@ -32,11 +32,11 @@ class ShortestGameScenario extends SpecificationWithJUnit
         // 1st player 3rd draw
         Card.Silver -> 1, Card.Copper -> 2,
           // the rest are arbitrary
-        Card.Silver -> 3, Card.Copper -> 9,
-//          Card.Copper -> 9,
+          Card.Silver -> 3, Card.Copper -> 9,
 
         // 2nd player 3rd draw - arbitrary
-        Card.Copper -> 3, Card.Estate -> 2, Card.Copper -> 4, Card.Estate -> 1
+        Card.Copper -> 3, Card.Estate -> 2,
+          Card.Copper -> 4, Card.Estate -> 1
       ))
 
 
@@ -208,21 +208,35 @@ class ShortestGameScenario extends SpecificationWithJUnit
           Seq(NoAction, NoBuy, CleanupAction)
       )
 
-    "On the last action of the game" in {
+    "On the last buy of the game" in {
+      val beforeLastBuy : Game =
+//        afterBothPlayersFourthTurns
+        rules.transition(
+          afterBothPlayersFourthTurns,
+          NoAction)
+
       "First player" in {
         val firstPlayer =
-          afterBothPlayersFourthTurns.players(0)
+          beforeLastBuy.players(0)
 
         "Is next to act" in {
-          afterBothPlayersFourthTurns.nextToAct must be equalTo 0
+          beforeLastBuy.nextToAct must be equalTo 0
         }
 
         "Hand has 3 silvers and 2 coppers" in {
-          val lastActionHand : Seq[Card] =
-            firstPlayer.hand.cards
+          val lastBuyPhaseCardsInPlay : Seq[Card] =
+            firstPlayer.inPlay.cards
+          
+          lastBuyPhaseCardsInPlay.count(_ == Card.Silver) must be equalTo 3
+          lastBuyPhaseCardsInPlay.count(_ == Card.Copper) must be equalTo 2
+        }
 
-          lastActionHand.count(_ == Card.Silver) must be equalTo 3
-          lastActionHand.count(_ == Card.Copper) must be equalTo 2
+        "There is only one province remaining" in {
+          beforeLastBuy.basic.province.size must be equalTo 1
+        }
+
+        "Can buy the last province" in {
+          rules.moves(beforeLastBuy) must contain(Buy(Card.Province))
         }
       }
     }

@@ -36,7 +36,7 @@ class ShortestGameScenario extends SpecificationWithJUnit
 
         // 2nd player 3rd draw - arbitrary
         Card.Copper -> 2, Card.Estate -> 2,
-          Card.Copper -> 2, Card.Estate -> 2
+          Card.Copper -> 1, Card.Estate -> 1
       ))
 
 

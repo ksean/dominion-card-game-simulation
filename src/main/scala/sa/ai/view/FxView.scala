@@ -1,14 +1,9 @@
 package sa.ai.view
 
-import scalafx.scene.paint.Color
-import javafx.scene.shape.Rectangle
-import scalafx.scene.{Node, Scene}
+import scalafx.scene.Node
 import scalafx.application.JFXApp
-import scalafx.application.JFXApp.PrimaryStage
-import scalafx.scene.layout.{Pane, VBox, HBox}
-import scalafx.geometry.Insets
-import scalafx.scene.shape.{Arc, Circle}
-import scalafx.scene.control.{ScrollPane, Label, ComboBox}
+import scalafx.scene.layout.{VBox, HBox}
+import scalafx.scene.control.Label
 import sa.ai.model.{Dominion, Game}
 import sa.ai.model.card._
 

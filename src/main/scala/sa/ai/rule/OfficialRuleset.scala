@@ -147,7 +147,10 @@ case class OfficialRuleset(
     val nextDiscardPile = DiscardPile(Seq())
 
     // transitioningPlayer.deck.cards
-    val nextDeck = Deck(transitioningPlayer.deck.cards ++ shuffler.shuffle(transitioningPlayer.discard).cards)
+    val addedToDeck : Seq[Card] =
+      shuffler.shuffle(transitioningPlayer.discard).cards
+
+    val nextDeck = Deck(transitioningPlayer.deck.cards ++ addedToDeck)
 
     val nextPlayerState = Dominion(nextDiscardPile, nextDeck, transitioningPlayer.hand)
     val nextPlayers = currentPlayers.updated(playerIndex, nextPlayerState)

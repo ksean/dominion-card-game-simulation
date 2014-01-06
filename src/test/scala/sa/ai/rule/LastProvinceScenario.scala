@@ -13,7 +13,7 @@ class LastProvinceScenario extends SpecificationWithJUnit {
     val scenario = Game.twoPlayerLastBuy
 
     "Have a player" in {
-      val scenarioPlayer = scenario.players(scenario.nextToAct)
+      val scenarioPlayer = scenario.dominions(scenario.nextToAct)
 
       "With at least one available buy" in {
         val availableBuys = scenarioPlayer.buys

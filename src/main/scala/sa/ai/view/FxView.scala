@@ -1,7 +1,6 @@
 package sa.ai.view
 
 import scalafx.scene.Node
-import scalafx.application.JFXApp
 import scalafx.scene.layout.{VBox, HBox}
 import scalafx.scene.control.Label
 import sa.ai.model.{Dominion, Game}
@@ -10,7 +9,7 @@ import sa.ai.model.card._
 /**
  * Visualize a Dominion game state.
  */
-object FxView extends JFXApp
+object FxView
 {
   def cardView(card: Card) : Node =
     new Label(s"${card.name}")
@@ -127,7 +126,7 @@ object FxView extends JFXApp
           kingdomSupplyPiles,
           ViewUtils.labeled(
             "Player Dominions:",
-            dominionSeqView(state.players))
+            dominionSeqView(state.dominions))
         ))
     }
   }

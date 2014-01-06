@@ -34,6 +34,7 @@
         <scalacheck.version>1.11.1</scalacheck.version>
         <junit.version>4.11</junit.version>
         <scalamock.version>3.0</scalamock.version>
+        <guava.version>15.0</guava.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -66,6 +67,12 @@
             <groupId>org.scalaz</groupId>
             <artifactId>scalaz-concurrent_${scala-major.version}</artifactId>
             <version>${scalaz.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
 
         <dependency>

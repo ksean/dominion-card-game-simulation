@@ -44,7 +44,7 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
           val afterFirstPlayerShuffle = rules.transition(initialState, shuffle)
 
           "The first player's discard pile" in {
-            val discard = afterFirstPlayerShuffle.players(0).discard
+            val discard = afterFirstPlayerShuffle.dominions(0).discard
 
             "Is empty" in {
               discard.cards must beEmpty
@@ -52,7 +52,7 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
           }
 
           "The first player's deck" in {
-            val deck = afterFirstPlayerShuffle.players(0).deck
+            val deck = afterFirstPlayerShuffle.dominions(0).deck
 
             "Has 5 cards" in {
               deck.cards.size must be equalTo 5
@@ -60,7 +60,7 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
           }
 
           "The first player's hand" in {
-            val hand = afterFirstPlayerShuffle.players(0).hand
+            val hand = afterFirstPlayerShuffle.dominions(0).hand
 
             "Has 5 cards" in {
               hand.cards.size must be equalTo 5
@@ -73,7 +73,7 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
           }
 
           "The second player has not moved" in {
-            afterFirstPlayerShuffle.players(1) must be equalTo initialState.players(1)
+            afterFirstPlayerShuffle.dominions(1) must be equalTo initialState.dominions(1)
           }
         }
       }
@@ -88,17 +88,17 @@ class BeforeTheGameSpec extends SpecificationWithJUnit {
     "Start by both players shuffling and drawing 5 cards" in {
       "Where the second player shuffles after the first player" in {
         "Both having empty discard piles" in {
-          afterSecondPlayerShuffles.players.flatMap(_.discard.cards) must beEmpty
+          afterSecondPlayerShuffles.dominions.flatMap(_.discard.cards) must beEmpty
         }
 
         "Both having 5 cards in their decks" in {
-          afterSecondPlayerShuffles.players(0).deck.cards.size must be equalTo 5
-          afterSecondPlayerShuffles.players(1).deck.cards.size must be equalTo 5
+          afterSecondPlayerShuffles.dominions(0).deck.cards.size must be equalTo 5
+          afterSecondPlayerShuffles.dominions(1).deck.cards.size must be equalTo 5
         }
 
         "Both having 5 cards in their hands" in {
-          afterSecondPlayerShuffles.players(0).hand.cards.size must be equalTo 5
-          afterSecondPlayerShuffles.players(1).hand.cards.size must be equalTo 5
+          afterSecondPlayerShuffles.dominions(0).hand.cards.size must be equalTo 5
+          afterSecondPlayerShuffles.dominions(1).hand.cards.size must be equalTo 5
         }
       }
     }

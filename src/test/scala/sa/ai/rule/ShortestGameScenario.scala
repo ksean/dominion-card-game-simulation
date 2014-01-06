@@ -56,7 +56,7 @@ class ShortestGameScenario extends SpecificationWithJUnit
       }
 
       "With 4 coppers and 1 estate" in {
-        val firstHand = firstDraw.players(0).hand.cards
+        val firstHand = firstDraw.dominions(0).hand.cards
         firstHand.count(_ == Card.Copper) must be equalTo 4
       }
     }
@@ -67,7 +67,7 @@ class ShortestGameScenario extends SpecificationWithJUnit
 
     "After the first player's first action phase" in {
       "The first player's hand must consist of a single estate" in {
-        afterFirstPlayerFirstActionPhase.players(0).hand.cards must beEqualTo(Seq(Card.Estate))
+        afterFirstPlayerFirstActionPhase.dominions(0).hand.cards must beEqualTo(Seq(Card.Estate))
       }
     }
 
@@ -95,12 +95,12 @@ class ShortestGameScenario extends SpecificationWithJUnit
     
     "After both players' first turns" in {
       "Have the first player own a silver" in {
-        val firstPlayerSilvers = afterBothPlayersFirstTurns.players(0).cards.count(_ == Card.Silver)
+        val firstPlayerSilvers = afterBothPlayersFirstTurns.dominions(0).cards.count(_ == Card.Silver)
         firstPlayerSilvers must be equalTo 1
       }
       "Have the first player's discard pile consist of 4 coppers and 1 estate" in {
         val discarded : Seq[Card] =
-          afterBothPlayersFirstTurns.players(0).discard.cards
+          afterBothPlayersFirstTurns.dominions(0).discard.cards
 
         discarded.count(_ == Card.Copper) must beEqualTo(4)
         discarded must contain( Card.Estate )
@@ -108,7 +108,7 @@ class ShortestGameScenario extends SpecificationWithJUnit
 
       "Have the first player's hand consist of 3 coppers and 2 estates" in {
         val secondHand : Seq[Card] =
-          afterBothPlayersFirstTurns.players(0).hand.cards
+          afterBothPlayersFirstTurns.dominions(0).hand.cards
 
         secondHand.count(_ == Card.Copper) must beEqualTo(3)
         secondHand.count(_ == Card.Estate) must beEqualTo(2)
@@ -121,7 +121,7 @@ class ShortestGameScenario extends SpecificationWithJUnit
 
     "After the first player's second action phase" in {
       "The first player's hand must consist of two estates" in {
-        afterFirstPlayerSecondActionPhase.players(0).hand.cards.count(_ == Card.Estate) must be equalTo 2
+        afterFirstPlayerSecondActionPhase.dominions(0).hand.cards.count(_ == Card.Estate) must be equalTo 2
       }
     }
 
@@ -150,7 +150,7 @@ class ShortestGameScenario extends SpecificationWithJUnit
     "After both players' second turns" in {
       "Have the first player" in {
         val firstPlayerThirdTurn =
-          afterBothPlayersSecondTurns.players(0)
+          afterBothPlayersSecondTurns.dominions(0)
 
         "Own 2 silvers" in {
           val firstPlayerCards =
@@ -191,7 +191,7 @@ class ShortestGameScenario extends SpecificationWithJUnit
         }
 
         val firstPlayerFourthTurn =
-          afterBothPlayersThirdTurns.players(0)
+          afterBothPlayersThirdTurns.dominions(0)
 
         "Own 3 silvers" in {
           val firstPlayerSilvers = firstPlayerFourthTurn.cards.count(_ == Card.Silver)
@@ -217,7 +217,7 @@ class ShortestGameScenario extends SpecificationWithJUnit
     "Before the last buy of the game" in {
       "First player" in {
         val firstPlayer =
-          beforeLastBuy.players(0)
+          beforeLastBuy.dominions(0)
 
         "Is next to act" in {
           beforeLastBuy.nextToAct must be equalTo 0
@@ -253,7 +253,7 @@ class ShortestGameScenario extends SpecificationWithJUnit
 
       "With the first player as the winner" in {
         val winners : Set[Int] =
-          afterLastBuy.currentWinners()
+          afterLastBuy.currentlyWinningPlayers()
 
         winners.size must be equalTo 1
         winners must contain(0)

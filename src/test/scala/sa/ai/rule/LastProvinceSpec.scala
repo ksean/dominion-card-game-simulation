@@ -18,9 +18,9 @@ class LastProvinceSpec extends SpecificationWithJUnit {
         .empty
         .withProvincesRemaining(1)
         .withNextToAct(0)
-        .withPlayer(0, Dominion.initialState)
+        .withDominion(0, Dominion.initialState)
         .withPhase(BuyPhase)
-        .withPlayer(1, Dominion.initialState)
+        .withDominion(1, Dominion.initialState)
         .withInPlay(0, InPlay(Seq.fill(8)(Card.Copper)))
 
     "Have provinces remaining" in {
@@ -36,7 +36,7 @@ class LastProvinceSpec extends SpecificationWithJUnit {
       val nextToAct = winningState.nextToAct
 
       "Player" in {
-        val player = winningState.players(nextToAct)
+        val player = winningState.dominions(nextToAct)
 
         "Be in the buy phase" in {
           val playerPhase = winningState.phase
@@ -61,7 +61,7 @@ class LastProvinceSpec extends SpecificationWithJUnit {
           val playerVictoryPoints = player.victoryPoints + Card.Province.victory
 
           "To beat their opponent" in {
-            val opponentVictoryPoints = winningState.players((nextToAct + 1) % 2).victoryPoints
+            val opponentVictoryPoints = winningState.dominions((nextToAct + 1) % 2).victoryPoints
             playerVictoryPoints must be greaterThan opponentVictoryPoints
           }
         }

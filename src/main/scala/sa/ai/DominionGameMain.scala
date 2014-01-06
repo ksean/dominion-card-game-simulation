@@ -8,12 +8,47 @@ import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
 import scalafx.scene.Scene
 import scalafx.scene.control.ScrollPane
+import scala.util.Random
+import sa.ai.player.{Outcome, Playout, RandomPlayer, Player}
+import sa.ai.rule.{Shuffler, RandomShuffler, OfficialRuleset}
+import com.google.common.collect.{HashMultiset, TreeMultiset, Multisets, Multiset}
+import scala.collection.JavaConversions._
 
 /**
  * Entry point
  */
 object DominionGameMain extends JFXApp
 {
+  val random : Random =
+    new Random()
+
+  val counts : Multiset[Int] = HashMultiset.create()
+
+  for (i <- 1 to 100000000) {
+    if (i % 1000 == 0) {
+      println(i)
+    }
+
+    val outcome : Outcome =
+      Playout.playToCompletion(
+        Game.twoPlayerRestrictedInitialState,
+        OfficialRuleset(RandomShuffler(random)),
+        Seq.fill(2)(new RandomPlayer(random)))
+
+    counts.add(outcome.states.size)
+
+
+    if (i % 10000 == 0) {
+      println(s"\n\n$i")
+      counts.entrySet()
+        .toSeq.sortBy(_.getElement)
+        .map(e => s"${e.getElement}\t${e.getCount}")
+        .foreach(println)
+      println("\n\n")
+    }
+  }
+
+
   val state =
     Game.twoPlayerInitialState
 

@@ -10,7 +10,7 @@ object ConsoleView
 {
   def display(game:Game) {
     println("Players: ")
-    game.players.foreach(display)
+    game.dominions.foreach(display)
 
     println("\n\nBasic cards: ")
     display(game.basic)

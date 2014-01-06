@@ -12,7 +12,7 @@ class GameSpec extends SpecificationWithJUnit
     "Have a pre-defined initial state" in {
       val initial = Game.twoPlayerInitialState
 
-      val players = initial.players
+      val players = initial.dominions
       "For two players" in {
         "With a player count of two" in {
           players.size must be equalTo 2

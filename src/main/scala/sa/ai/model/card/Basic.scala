@@ -25,10 +25,18 @@ case class Basic(
       case Card.Silver => {
         copy(silver = silver.plusSize(-1))
       }
+
+      case Card.Estate => {
+        copy(estate = estate.plusSize(-1))
+      }
+
+      case Card.Copper => {
+        copy(copper = copper.plusSize(-1))
+      }
     }
 
 
-//    ???
+//  def withCardCount(card: Card)
 }
 
 object Basic {
@@ -43,6 +51,7 @@ object Basic {
       SupplyPile.empty,
       TrashPile.empty
     )
+
   val initialSetForTwoPlayers =
     Basic(
       copper   = Pile(Card.Copper, 46),
@@ -52,6 +61,18 @@ object Basic {
       duchy    = Pile(Card.Duchy, 8),
       province = Pile(Card.Province, 8),
       curse    = Pile(Card.Curse, 10),
+      trash    = TrashPile(Seq())
+    )
+
+  val initialRestrictedSetForTwoPlayers =
+    Basic(
+      copper   = Pile(Card.Copper, 46),
+      silver   = Pile(Card.Silver, 40),
+      gold     = Pile(Card.Gold, 0),
+      estate   = Pile(Card.Estate, 8),
+      duchy    = Pile(Card.Duchy, 0),
+      province = Pile(Card.Province, 8),
+      curse    = Pile(Card.Curse, 0),
       trash    = TrashPile(Seq())
     )
 

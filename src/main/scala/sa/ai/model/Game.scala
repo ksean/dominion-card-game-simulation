@@ -4,13 +4,14 @@ import sa.ai.model.card._
 import sa.ai.rule._
 import sa.ai.rule.OfficialRuleset
 import scalaz.Digit._0
+import sa.ai.player.InfoSet
 
 /**
  * Dominion game
  */
 case class Game(
   nextToAct : Int,
-  players   : Seq[Dominion],
+  dominions   : Seq[Dominion],
   basic     : Basic,
   kingdom   : Kingdom,
   phase     : Phase
@@ -23,8 +24,11 @@ case class Game(
 
 
 
-  def nextPlayer : Dominion =
-    players(nextToAct)
+  def nextDominion : Dominion =
+    dominions(nextToAct)
+
+  def nextInfoSet : InfoSet =
+    InfoSet(nextDominion)
 
 
   def subtractSupply(card: Card) : Game  = {
@@ -41,9 +45,10 @@ case class Game(
   }
 
 
-  def currentWinners() : Set[Int] = {
+  def currentlyWinningPlayers() : Set[Int] = {
+
     val victoryPoints : Seq[Int] =
-      (0 until players.size).map(victoryPoint)
+      (0 until dominions.size).map(victoryPoint)
 
     val maxPoints : Int =
       victoryPoints.max
@@ -57,8 +62,8 @@ case class Game(
     }
     else
     {
-//      val winningCandidates : Set[Int] =
-//        victoryPoints.index
+//            val winningCandidates : Set[Int] =
+//              victoryPoints.index
 
 
       ???
@@ -66,7 +71,7 @@ case class Game(
   }
 
   def victoryPoint(playerIndex : Int) : Int =
-    players(playerIndex).cards.map(_.victory).sum
+    dominions(playerIndex).cards.map(_.victory).sum
 
 
   def withProvincesRemaining(count: Int) : Game = {
@@ -82,17 +87,17 @@ case class Game(
   }
 
 
-  def withNextPlayer(dominion: Dominion) : Game =
-    withPlayer(nextToAct, dominion)
+  def withNextDominion(dominion: Dominion) : Game =
+    withDominion(nextToAct, dominion)
 
-  def withPlayer(player: Int, dominion: Dominion) : Game = {
+  def withDominion(player: Int, dominion: Dominion) : Game = {
     val nextPlayers : Seq[Dominion] =
-      players
+      dominions
         .padTo(player + 1, Dominion.initialState)
         .updated(player, dominion)
 
     copy(
-      players = nextPlayers
+      dominions = nextPlayers
     )
   }
 
@@ -104,48 +109,44 @@ case class Game(
 
 
   def withNextHand(handTransformer : (Hand => Hand)) : Game =
-    withNextHand(handTransformer(nextPlayer.hand))
+    withNextHand(handTransformer(nextDominion.hand))
 
   def withNextHand(nextHand : Hand) : Game =
     withHand(nextToAct, nextHand)
 
   def withHand(player: Int, hand: Hand) : Game = {
     val nextDominion : Dominion =
-      players(player)
+      dominions(player)
         .copy(hand = hand)
 
-    withPlayer(player, nextDominion)
+    withDominion(player, nextDominion)
   }
 
 
 
   def withNextInPlay(inPlayTransformer : (InPlay => InPlay)) : Game =
-    withNextInPlay(inPlayTransformer(nextPlayer.inPlay))
+    withNextInPlay(inPlayTransformer(nextDominion.inPlay))
 
   def withNextInPlay(inPlayer: InPlay) : Game =
     withInPlay(nextToAct, inPlayer)
 
-  def withNextNextToAct(player: Int) : Game = {
-    copy(nextToAct = player)
-  }
-
   def withInPlay(player: Int, inPlay: InPlay) : Game = {
     val nextDominion : Dominion =
-      players(player)
+      dominions(player)
         .copy(inPlay = inPlay)
 
-    withPlayer(player, nextDominion)
+    withDominion(player, nextDominion)
   }
 
   def withNextDiscard(discardTransformer : (DiscardPile => DiscardPile)) : Game =
-    withDiscard(nextToAct, discardTransformer(nextPlayer.discard))
+    withDiscard(nextToAct, discardTransformer(nextDominion.discard))
 
   def withDiscard(player: Int, discard: DiscardPile) : Game = {
     val nextDominion : Dominion =
-      players(player)
+      dominions(player)
         .copy(discard = discard)
 
-    withPlayer(player, nextDominion)
+    withDominion(player, nextDominion)
   }
 
   def withNextSpent(spent : Int) : Game =
@@ -153,10 +154,10 @@ case class Game(
 
   def withSpent(player: Int, spent: Int) : Game = {
     val nextDominion : Dominion =
-      players(player)
+      dominions(player)
         .copy(spent = spent)
 
-    withPlayer(player, nextDominion)
+    withDominion(player, nextDominion)
   }
 }
 
@@ -174,6 +175,14 @@ object Game {
     Seq.fill(2)(Dominion.initialState),
     Basic.initialSetForTwoPlayers,
     Kingdom.firstGame,
+    BeforeTheGamePhase
+  )
+
+  val twoPlayerRestrictedInitialState = Game(
+    0,
+    Seq.fill(2)(Dominion.initialState),
+    Basic.initialRestrictedSetForTwoPlayers,
+    Kingdom.empty,
     BeforeTheGamePhase
   )
 

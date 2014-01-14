@@ -45,8 +45,12 @@ case class Basic(
       case Card.Province => {
         copy(province = province.plusSize(-1))
       }
-      
 
+
+      // curse
+      case Card.Curse => {
+        copy(curse = curse.plusSize(-1))
+      }
     }
 
 

@@ -70,7 +70,11 @@ case class Game(
 //              victoryPoints.index
 
 
-      ???
+      victoryPoints
+        .zipWithIndex
+        .filter((pointsIndex: (Int, Int)) => pointsIndex._1 == maxPoints)
+        .map(_._2)
+        .toSet
     }
   }
 

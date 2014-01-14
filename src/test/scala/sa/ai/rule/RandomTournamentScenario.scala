@@ -21,7 +21,7 @@ class RandomTournamentScenario extends SpecificationWithJUnit {
     }
     
     val playouts : Int =
-      1
+      10000
     
     "Have a distinct number of playouts" in {
       playouts must be greaterThan 0
@@ -31,9 +31,22 @@ class RandomTournamentScenario extends SpecificationWithJUnit {
       val outcome : TournamentOutcome =
         Tournament.play(players, playouts, OfficialRuleset(RandomShuffler(new Random(seed))))
 
+      print(outcome)
+
       
       "With a winner" in {
         outcome.winner must be between(0, players.size - 1)
+      }
+
+      "Where the number of wins of both players combiner" in {
+        val wins : Seq[Int] =
+          outcome.wins
+
+        "Is at least as many as the number of playouts" in {
+          wins.sum must be greaterThanOrEqualTo playouts
+        }
+
+
       }
     }
   }

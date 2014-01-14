@@ -25,9 +25,10 @@ object Tournament
       for (winner <- winners) {
         winTotal = winTotal.updated(winner, winTotal(winner) + 1)
       }
-
     }
-    TournamentOutcome(winTotal.indexOf(winTotal.max))
 
+    TournamentOutcome(
+      winTotal.indexOf(winTotal.max),
+      winTotal)
   }
 }

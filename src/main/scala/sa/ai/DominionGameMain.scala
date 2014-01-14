@@ -11,8 +11,11 @@ import scalafx.scene.control.ScrollPane
 import scala.util.Random
 import sa.ai.player.{GameOutcome, Playout, RandomPlayer, Player}
 import sa.ai.rule.{Shuffler, RandomShuffler, OfficialRuleset}
-import com.google.common.collect.{HashMultiset, TreeMultiset, Multisets, Multiset}
+import com.google.common.collect._
 import scala.collection.JavaConversions._
+import sa.ai.rule.OfficialRuleset
+import sa.ai.player.GameOutcome
+import sa.ai.rule.RandomShuffler
 
 /**
  * Entry point
@@ -23,6 +26,7 @@ object DominionGameMain extends JFXApp
     new Random()
 
   val counts : Multiset[Int] = HashMultiset.create()
+//  val counts : ArrayTable[Set[Int], Int] = ArrayTable.create()
 
   for (i <- 1 to 100000000) {
     if (i % 1000 == 0) {
@@ -35,10 +39,11 @@ object DominionGameMain extends JFXApp
         OfficialRuleset(RandomShuffler(random)),
         Seq.fill(2)(new RandomPlayer(random)))
 
+    outcome.winners
     counts.add(outcome.states.size)
 
 
-    if (i % 10000 == 0) {
+    if (i % 1000 == 0) {
       println(s"\n\n$i")
       counts.entrySet()
         .toSeq.sortBy(_.getElement)

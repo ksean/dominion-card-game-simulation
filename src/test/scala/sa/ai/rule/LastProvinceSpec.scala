@@ -10,7 +10,7 @@ import sa.ai.model.card.{InPlay, Card}
  */
 class LastProvinceSpec extends SpecificationWithJUnit {
   val rules =
-    OfficialRuleset()
+    OfficialRuleset(Shuffler.passThrough)
 
   "The two-player game-winning province purchase" should {
     val winningState : Game =

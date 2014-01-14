@@ -16,23 +16,37 @@ case class Basic(
   def supply : Set[SupplyPile] =
     Set(copper, silver, gold, estate, duchy, province, curse)
 
-  def subtractCard(card: Card) : Basic =
+  def subtractSupply(card: Card) : Basic =
     card match{
-      case Card.Province => {
-        copy(province = province.plusSize(-1))
+      
+      // Treasure cards
+      case Card.Copper => {
+        copy(copper = copper.plusSize(-1))
       }
-
+        
       case Card.Silver => {
         copy(silver = silver.plusSize(-1))
       }
 
-      case Card.Estate => {
-        copy(estate = estate.plusSize(-1))
+      case Card.Gold => {
+        copy(gold = gold.plusSize(-1))
       }
 
-      case Card.Copper => {
-        copy(copper = copper.plusSize(-1))
+
+      // Victory cards
+      case Card.Estate => {
+          copy(estate = estate.plusSize(-1))
       }
+
+      case Card.Duchy => {
+        copy(duchy = duchy.plusSize(-1))
+      }
+        
+      case Card.Province => {
+        copy(province = province.plusSize(-1))
+      }
+      
+
     }
 
 
@@ -68,9 +82,9 @@ object Basic {
     Basic(
       copper   = Pile(Card.Copper, 46),
       silver   = Pile(Card.Silver, 40),
-      gold     = Pile(Card.Gold, 0),
+      gold     = Pile(Card.Gold, 30),
       estate   = Pile(Card.Estate, 8),
-      duchy    = Pile(Card.Duchy, 0),
+      duchy    = Pile(Card.Duchy, 8),
       province = Pile(Card.Province, 8),
       curse    = Pile(Card.Curse, 0),
       trash    = TrashPile(Seq())

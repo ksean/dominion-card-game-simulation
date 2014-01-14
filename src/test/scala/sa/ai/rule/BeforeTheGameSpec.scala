@@ -8,7 +8,7 @@ import sa.ai.model.{BeforeTheGamePhase, Game}
  */
 class BeforeTheGameSpec extends SpecificationWithJUnit {
   "Dominion rules for two players" should {
-    val rules = OfficialRuleset()
+    val rules = OfficialRuleset(Shuffler.passThrough)
 
     val initialState = Game.twoPlayerInitialState
     "Describe the initial state" in {

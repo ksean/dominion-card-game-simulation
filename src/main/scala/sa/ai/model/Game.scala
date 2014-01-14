@@ -34,14 +34,18 @@ case class Game(
   def subtractSupply(card: Card) : Game  = {
     if(basic.supply.map(_.card).contains(card)) {
       val nextBasic : Basic =
-        basic.subtractCard(card)
+        basic.subtractSupply(card)
 
       copy(basic = nextBasic)
-    }
-    else {
+    } else {
       ???
     }
-    
+    /*else if(kingdom.supply.map(_.card).contains(card)) {
+      val nextKingdom : Kingdom =
+        ???
+
+      copy(kingdom = nextKingdom)
+    }*/
   }
 
 

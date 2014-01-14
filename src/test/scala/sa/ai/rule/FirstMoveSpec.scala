@@ -6,7 +6,7 @@ import sa.ai.model.{ActionPhase, Game}
 
 class FirstMoveSpec extends SpecificationWithJUnit {
   val rules =
-    OfficialRuleset()
+    OfficialRuleset(Shuffler.passThrough)
 
   "The start of a two-player Dominion game" should {
     val firstActionState = Game.twoPlayerFirstAction(rules)

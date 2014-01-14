@@ -9,7 +9,7 @@ import scalafx.application.JFXApp.PrimaryStage
 import scalafx.scene.Scene
 import scalafx.scene.control.ScrollPane
 import scala.util.Random
-import sa.ai.player.{Outcome, Playout, RandomPlayer, Player}
+import sa.ai.player.{GameOutcome, Playout, RandomPlayer, Player}
 import sa.ai.rule.{Shuffler, RandomShuffler, OfficialRuleset}
 import com.google.common.collect.{HashMultiset, TreeMultiset, Multisets, Multiset}
 import scala.collection.JavaConversions._
@@ -29,7 +29,7 @@ object DominionGameMain extends JFXApp
       println(i)
     }
 
-    val outcome : Outcome =
+    val outcome : GameOutcome =
       Playout.playToCompletion(
         Game.twoPlayerRestrictedInitialState,
         OfficialRuleset(RandomShuffler(random)),

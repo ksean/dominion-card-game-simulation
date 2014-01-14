@@ -8,7 +8,7 @@ import sa.ai.model.{BuyPhase, Game}
  */
 class FirstBuySpec extends SpecificationWithJUnit {
   val rules =
-    OfficialRuleset()
+    OfficialRuleset(Shuffler.passThrough)
 
   "The first buy phase" should {
     val inBuyPhase = Game.twoPlayerFirstBuy(rules)

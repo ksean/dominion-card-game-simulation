@@ -8,7 +8,7 @@ import scala.collection.mutable
  * 
  */
 case object Playout {
-  def playToCompletion(game: Game, rules: Ruleset, players: Seq[Player]) : Outcome = {
+  def playToCompletion(game: Game, rules: Ruleset, players: Seq[Player]) : GameOutcome = {
     var moveCount : Int = 0
 
     val history : mutable.Buffer[Game] = mutable.Buffer()
@@ -44,6 +44,6 @@ case object Playout {
       history.append(nextGame)
     }
 
-    Outcome(history.toSeq)
+    GameOutcome(history.toSeq)
   }
 }

@@ -5,8 +5,7 @@ import sa.ai.model.card._
 
 
 case class OfficialRuleset(
-    shuffler : Shuffler =
-      Shuffler.passThrough
+    shuffler : Shuffler
   ) extends Ruleset
 {
   //--------------------------------------------------------------------------------------------------------------------

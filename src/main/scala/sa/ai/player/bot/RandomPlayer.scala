@@ -1,7 +1,8 @@
-package sa.ai.player
+package sa.ai.player.bot
 
 import scala.util.Random
 import sa.ai.rule.Move
+import sa.ai.player.{InfoSet, Player}
 
 /**
  * 

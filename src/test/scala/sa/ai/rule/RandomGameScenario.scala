@@ -1,9 +1,10 @@
 package sa.ai.rule
 
 import org.specs2.mutable.SpecificationWithJUnit
-import sa.ai.player.{Playout, RandomPlayer, Player}
+import sa.ai.player.{Playout, Player}
 import scala.util.Random
 import sa.ai.model.Game
+import sa.ai.player.bot.RandomPlayer
 
 /**
  *

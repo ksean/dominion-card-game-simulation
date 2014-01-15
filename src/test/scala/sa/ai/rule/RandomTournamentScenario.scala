@@ -1,9 +1,10 @@
 package sa.ai.rule
 
 import org.specs2.mutable.SpecificationWithJUnit
-import sa.ai.player.{TournamentOutcome, GameOutcome, Tournament, Player, RandomPlayer}
+import sa.ai.player.{TournamentOutcome, GameOutcome, Tournament, Player}
 import com.google.common.math.IntMath
 import scala.util.Random
+import sa.ai.player.bot.RandomPlayer
 
 /**
  * 

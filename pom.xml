@@ -162,7 +162,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>sa.ai.DominionGameMain</mainClass>
+                            <mainClass>sa.ai.DominionGameInteractive</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -6,7 +6,10 @@ import sa.ai.player.{Player, Playout, GameOutcome}
 import sa.ai.model.Game
 import sa.ai.rule.{RandomShuffler, OfficialRuleset}
 import scala.collection.JavaConversions._
-import sa.ai.player.bot.{AlexPlayer, SeanPlayer, RandomPlayer}
+import sa.ai.player.bot._
+import sa.ai.rule.OfficialRuleset
+import sa.ai.player.GameOutcome
+import sa.ai.rule.RandomShuffler
 
 /**
  *
@@ -24,13 +27,16 @@ object DominionGameBatch extends App
     }
 
     val playerA : Player =
-      new SeanPlayer(random)
+//      new SeanPlayer(random)
 //      new AlexPlayer(random)
+      new Alex3Player(random)
 //      new RandomPlayer(random)
 
     val playerB : Player =
 //      new SeanPlayer(random)
-      new AlexPlayer(random)
+//      new ShawnPlayer(random)
+//      new AlexPlayer(random)
+      new Alex2Player(random)
 //      new RandomPlayer(random)
 
     val outcome : GameOutcome =

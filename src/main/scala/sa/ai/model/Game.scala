@@ -28,7 +28,7 @@ case class Game(
     dominions(nextToAct)
 
   def nextInfoSet : InfoSet =
-    InfoSet(nextDominion)
+    InfoSet(basic, nextDominion)
 
 
   def subtractSupply(card: Card) : Game  = {

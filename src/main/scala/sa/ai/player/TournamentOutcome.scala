@@ -2,5 +2,22 @@ package sa.ai.player
 
 
 case class TournamentOutcome(
-  winner : Int,
-  wins   : Seq[Int])
+  wins : Seq[Int])
+{
+  def winner : Int =
+    wins.indexOf(wins.max)
+  
+  def victoryMargin : Double =
+    wins.max.toDouble / wins.sum - 1.0 / wins.size
+
+
+  def plus(addend : TournamentOutcome) : TournamentOutcome = {
+    assert(wins.size == addend.wins.size)
+    
+    val sum : Seq[Int] =
+      wins.zip(addend.wins)
+        .map((playerWins: (Int, Int)) => playerWins._1 + playerWins._2)
+    
+    TournamentOutcome(sum)
+  }
+}

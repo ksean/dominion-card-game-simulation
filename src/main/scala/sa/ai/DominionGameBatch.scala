@@ -2,13 +2,12 @@ package sa.ai
 
 import scala.util.Random
 import com.google.common.collect.{HashMultiset, Multiset}
-import sa.ai.player.{Player, Playout, GameOutcome}
+import sa.ai.player._
 import sa.ai.model.Game
 import sa.ai.rule.{RandomShuffler, OfficialRuleset}
 import scala.collection.JavaConversions._
 import sa.ai.player.bot._
 import sa.ai.rule.OfficialRuleset
-import sa.ai.player.GameOutcome
 import sa.ai.rule.RandomShuffler
 
 /**
@@ -19,44 +18,37 @@ object DominionGameBatch extends App
   val random : Random =
     new Random()
 
-  val counts : Multiset[Int] = HashMultiset.create()
+  var runningOutcome : Option[TournamentOutcome] =
+    None
 
-  for (i <- 1 to 1000000) {
-    if (i % 100 == 0) {
-      println(i)
-    }
-
+  for (i <- 1 to 100)
+  {
     val playerA : Player =
 //      new SeanPlayer(random)
 //      new AlexPlayer(random)
-      new Alex3Player(random)
+      new Alex2Player(random)
+//      new Alex3Player(random)
 //      new RandomPlayer(random)
 
     val playerB : Player =
 //      new SeanPlayer(random)
-//      new ShawnPlayer(random)
+      new ShawnPlayer(random)
 //      new AlexPlayer(random)
-      new Alex2Player(random)
+//      new Alex2Player(random)
 //      new RandomPlayer(random)
 
-    val outcome : GameOutcome =
-      Playout.playToCompletion(
-        Game.twoPlayerRestrictedInitialState,
-        OfficialRuleset(RandomShuffler(random)),
-        Seq(playerA, playerB))
+    val playouts : Int =
+      1000
 
-//    counts.add(outcome.states.size)
-    counts.addAll(outcome.winners)
+    val tournamentOutcome : TournamentOutcome =
+      Tournament.play(Seq(playerA,playerB), playouts, OfficialRuleset(RandomShuffler(random)))
 
-    if (i % 1000 == 0) {
-      println(s"\n\n$i")
-      counts.entrySet()
-        .toSeq.sortBy(_.getElement)
-        .map(e => s"${e.getElement}\t${e.getCount}")
-        .foreach(println)
-      println("\n\n")
-    }
+    runningOutcome =
+      runningOutcome match {
+        case None => Some(tournamentOutcome)
+        case Some(tally) => Some(tally.plus(tournamentOutcome))
+      }
+
+    println(runningOutcome.map(o => o.winner + "\t" + o.wins + "\t" + o.victoryMargin * 1000).get)
   }
-
-
 }

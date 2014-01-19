@@ -12,28 +12,25 @@ import sa.ai.player.bot.RandomPlayer
 class RandomTournamentScenario extends SpecificationWithJUnit {
   "A two player random tournament" should {
     val seed : Int =
-      IntMath.pow(420, 2)
-    
-    val players : Seq[Player] =
-      Seq.fill(2)(new RandomPlayer(new Random(seed)))
+        IntMath.pow(420, 2)
 
-    "Consist of two random players" in {
-      players.size must be equalTo 2
-    }
-    
-    val playouts : Int =
-      10000
-    
-    "Have a distinct number of playouts" in {
-      playouts must be greaterThan 0
-    }
+      val players : Seq[Player] =
+        Seq.fill(2)(new RandomPlayer(new Random(seed)))
 
-    "Have an outcome" in {
-      val outcome : TournamentOutcome =
-        Tournament.play(players, playouts, OfficialRuleset(RandomShuffler(new Random(seed))))
+      "Consist of two random players" in {
+        players.size must be equalTo 2
+      }
 
-      print(outcome)
+      val playouts : Int =
+        100
 
+      "Have a distinct number of playouts" in {
+        playouts must be greaterThan 0
+      }
+
+      "Have an outcome" in {
+        val outcome : TournamentOutcome =
+          Tournament.play(players, playouts, OfficialRuleset(RandomShuffler(new Random(seed))))
       
       "With a winner" in {
         outcome.winner must be between(0, players.size - 1)
@@ -46,8 +43,6 @@ class RandomTournamentScenario extends SpecificationWithJUnit {
         "Is at least as many as the number of playouts" in {
           wins.sum must be greaterThanOrEqualTo playouts
         }
-
-
       }
     }
   }

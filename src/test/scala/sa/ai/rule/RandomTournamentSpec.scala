@@ -12,7 +12,7 @@ import com.google.common.math.IntMath
  */
 class RandomTournamentSpec extends SpecificationWithJUnit
 {
-  "A random tournament" should {
+  "Two player tournament" should {
 
     val playouts : Int =
       1000

@@ -21,23 +21,27 @@ class ShaunPlayer(val random : Random) extends Player
     weight(info, move) * random.nextDouble()
 
 
-  def weight(info: InfoSet, move : Move) : Double =
+  def weight(info: InfoSet, move : Move) : Double = {
+    val lastProvinces : Int =
+      info.basic.province.size
+
     move match {
       case Buy(card) =>
         card match {
           case Card.Curse => -100000
 
-          case Card.Estate   => -100
-          case Card.Duchy    => -1
-          case Card.Province => 10000000
+          case Card.Estate   => if (lastProvinces >  5) -100 else 5
+          case Card.Duchy    => if (lastProvinces >  5) -10 else 100
+          case Card.Province => 1000000000/lastProvinces
 
           case Card.Copper => -100
-          case Card.Silver => 10
-          case Card.Gold   => 1000
+          case Card.Silver => if (lastProvinces >  5) 10 else -1
+          case Card.Gold   => if (lastProvinces >  5) 1000 else -1
 
           case _ => 0.01
         }
 
       case _ => 0.01
     }
+  }
 }

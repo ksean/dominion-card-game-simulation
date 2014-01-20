@@ -8,7 +8,7 @@ case class TournamentOutcome(
     wins.indexOf(wins.max)
   
   def victoryMargin : Double =
-    wins.max.toDouble / wins.sum - 1.0 / wins.size
+    wins.max.toDouble / wins.sum
 
 
   def plus(addend : TournamentOutcome) : TournamentOutcome = {

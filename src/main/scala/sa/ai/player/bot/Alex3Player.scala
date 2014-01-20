@@ -8,37 +8,33 @@ import sa.ai.model.card.Card
 /**
   *
   */
-class Alex3Player(val random : Random) extends Player
- {
-   def play(infoSet: InfoSet, actions: Set[Move]): Move =
-     actions
-       .map(action =>
-         (action, score(infoSet, action)))
-       .maxBy(_._2)
-       ._1
+class Alex3Player(random : Random) extends WeightedMovePlayer(random)
+{
+  def weight(info: InfoSet, move : Move) : Double = {
+    val endGame : Boolean =
+      info.basic.province.cards.size < 5
 
-   def score(info: InfoSet, move : Move) : Double =
-     weight(info, move) * random.nextDouble()
+    move match {
+      case Buy(Card.Curse) =>
+        -1000
 
 
-   def weight(info: InfoSet, move : Move) : Double =
-     move match {
-       case Buy(card) =>
-         card match {
-           case Card.Curse => -1000
+      case Buy(Card.Estate) =>
+        if (endGame) 10 else  -10
 
-           case Card.Estate   => -10
-           case Card.Duchy    => -1
-           case Card.Province => 100000
 
-           case Card.Copper => -3
-//           case Card.Silver => if (info.dominion.cards.count(_ == Card.Silver) > 20) -1 else 4
-           case Card.Silver => 4
-           case Card.Gold   => 100
+      case Buy(Card.Duchy) =>
+        if (endGame) 100 else  -1
 
-           case _ => 0.01
-         }
+      case Buy(Card.Province) =>
+        100000
 
-       case _ => 0.01
-     }
- }
+
+      case Buy(Card.Copper) => -3
+      case Buy(Card.Silver) => 4
+      case Buy(Card.Gold)   => 100
+
+      case _ => 0.01
+    }
+  }
+}

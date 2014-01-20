@@ -21,18 +21,19 @@ object DominionGameBatch extends App
   var runningOutcome : Option[TournamentOutcome] =
     None
 
-  for (i <- 1 to 100)
+  for (i <- 1 to 100000000)
   {
     val playerA : Player =
 //      new SeanPlayer(random)
 //      new AlexPlayer(random)
-      new Alex2Player(random)
-//      new Alex3Player(random)
+//      new Alex2Player(random)
+      new Alex3Player(random)
 //      new RandomPlayer(random)
 
     val playerB : Player =
 //      new SeanPlayer(random)
-      new ShawnPlayer(random)
+//      new ShawnPlayer(random)
+      new ShaunPlayer(random)
 //      new AlexPlayer(random)
 //      new Alex2Player(random)
 //      new RandomPlayer(random)

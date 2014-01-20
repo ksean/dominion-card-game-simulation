@@ -8,35 +8,19 @@ import sa.ai.model.card.Card
 /**
   *
   */
-class Alex2Player(val random : Random) extends Player
+class Alex2Player(random : Random) extends WeightedMovePlayer(random)
  {
-   def play(infoSet: InfoSet, actions: Set[Move]): Move =
-     actions
-       .map(action =>
-         (action, score(infoSet, action)))
-       .maxBy(_._2)
-       ._1
-
-   def score(info: InfoSet, move : Move) : Double =
-     weight(info, move) * random.nextDouble()
-
-
    def weight(info: InfoSet, move : Move) : Double =
      move match {
-       case Buy(card) =>
-         card match {
-           case Card.Curse => -1000
+       case Buy(Card.Curse) => -1000
 
-           case Card.Estate   => -10
-           case Card.Duchy    => -1
-           case Card.Province => 100000
+       case Buy(Card.Estate)   => -10
+       case Buy(Card.Duchy)    => -1
+       case Buy(Card.Province) => 100000
 
-           case Card.Copper => -3
-           case Card.Silver => 4
-           case Card.Gold   => 100
-
-           case _ => 0.01
-         }
+       case Buy(Card.Copper) => -3
+       case Buy(Card.Silver) => 4
+       case Buy(Card.Gold)   => 100
 
        case _ => 0.01
      }

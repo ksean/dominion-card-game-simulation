@@ -15,10 +15,11 @@ object FxView
     new Label(s"${card.name}")
 
   def cardSeqView(cards: Seq[Card]) : Node =
-    new HBox { content =
+    if (cards.isEmpty) {
+      new Label("[Empty]")
+    } else {
       ViewUtils.row(
-        cards.map(cardView)
-      )
+        cards.map(cardView))
     }
 
   def supplyPileView(pile: SupplyPile) : Node =
@@ -39,20 +40,16 @@ object FxView
       }
 
     val inPlayCards : Node =
-      ViewUtils.row(
-          dominion.inPlay.cards.map(cardView))
+      cardSeqView(dominion.inPlay.cards)
 
     val handCards : Node =
-      ViewUtils.row(
-        dominion.hand.cards.map(cardView))
+      cardSeqView(dominion.hand.cards)
 
     val deckCards : Node =
-      ViewUtils.row(
-        dominion.deck.cards.map(cardView))
+      cardSeqView(dominion.deck.cards)
 
     val discardCards : Node =
-      ViewUtils.row(
-        dominion.discard.cards.map(cardView))
+      cardSeqView(dominion.discard.cards)
 
     ViewUtils.column(Seq(
       attributes,
@@ -83,26 +80,15 @@ object FxView
         ViewUtils.row(
           state.basic.supply.toSeq.map(supplyPileView))
 
-      val trashView : Node = {
-        val trash = state.basic.trash.cards
-        if (trash.isEmpty) {
-          new Label("[Empty]")
-        } else {
-          ViewUtils.row(
-            trash.map(cardView))
-        }
-      }
+      val trashView : Node =
+        cardSeqView(state.basic.trash.cards)
 
       new VBox { content =
         ViewUtils.labeled(
           "Basic:",
           ViewUtils.column(Seq(
-            ViewUtils.labeled(
-              "Supply:",
-              basicSupplyView),
-            ViewUtils.labeled(
-              "Trash:",
-              trashView)
+            ViewUtils.labeled("Supply:", basicSupplyView),
+            ViewUtils.labeled("Trash:", trashView)
           ))
         )
       }
@@ -119,8 +105,7 @@ object FxView
         ViewUtils.column(Seq(
           new VBox { content = Seq(
             new Label(s"Next to act index: ${state.nextToAct}"),
-            new Label(s"Phase is: ${state.phase}"),
-            new Label(s"Provinces left: ${state.basic.province.size}"))
+            new Label(s"Phase: ${state.phase}"))
           },
           basicSupplyPiles,
           kingdomSupplyPiles,

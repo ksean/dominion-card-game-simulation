@@ -11,7 +11,7 @@ import sa.ai.player.InfoSet
  */
 case class Game(
   nextToAct : Int,
-  dominions   : Seq[Dominion],
+  dominions : Seq[Dominion],
   basic     : Basic,
   kingdom   : Kingdom,
   phase     : Phase

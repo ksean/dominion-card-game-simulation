@@ -20,7 +20,7 @@ object DominionGameInteractive extends JFXApp
   stage = new PrimaryStage {
     title = "Dominion"
     width = 600
-    height = 750
+    height = 800
 
     scene = new Scene {
       root =
